@@ -13,7 +13,7 @@ const createUser = asyncHandler(async (req, res) => {
      * TODO:With the help of email find the user exists or not
      */
     const findUser = await User.findOne({ email: email });
-  
+    
     if (!findUser) {
       /**
        * TODO:if user not found user create a new user

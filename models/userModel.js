@@ -4,7 +4,6 @@ const userSchema = new mongoose.Schema({
     username : {
         type : String,
         required : true,
-        unique : true
     },
     email : {
         type : String,
@@ -24,11 +23,22 @@ const userSchema = new mongoose.Schema({
         required:false,
         default:false
     },
-    courses :{
+    pasUnb :{
         type:[String],
         required:false,
 
+    },
+    VestUnb :{
+        type:[String],
+        required:false
     }
+    ,
+    isAdmin:{
+        type:Boolean,
+        default:false,
+        required:false
+    }
+
 
 
 })

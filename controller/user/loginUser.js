@@ -13,14 +13,18 @@ const loginUser = asyncHandler( async function (req,res){
     const {email,password} = req.body;
 
     if ( !email || !password){
-        return next(new Error('please privide email and password' ,400))
+        return res.status(401).json({message:"Empty data"})
         }
     const user = await User.findOne({email})
-    console.log(user)
+  
+    if (!user){
+        return res.status(401).json({message:"User not exist"})
+    }
+   
     const correct = await user.correctPassword(password,user.password)
     
-    if (!user || !correct){
-        return next(new Error("invalis email or password" ,401))
+    if (!correct){
+        return res.status(401).json({message:"Invalid Password"})
     }
 
     const token = signToken(user._id)

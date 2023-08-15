@@ -22,8 +22,8 @@ exports.tokenValidator = asyncHandler(async (req, res, next) => {
             return  res.status(401).json({ message: 'user not found' });
         } 
         //set the decoded user info on the request for use in subsequent middleware or routes
-        req.user = freshUser;
-        return res.status(200).json(freshUser)
+        req.id = freshUser.id;
+     //   return res.status(200).json(req.id)
         next();
     } catch (error) {
         return res.status(401).json({ message: 'Invalid or expired token' });

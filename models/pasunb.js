@@ -1,13 +1,8 @@
 const mongoose = require('mongoose')
 
 const pasUnbSchema = new mongoose.Schema({
-    subprograma:{
-        type: String,
-        required:true,
-
-    },
     stage_pas: {
-        type: Number,
+        type: String,
         required:true,
     },
 
@@ -29,7 +24,7 @@ const pasUnbSchema = new mongoose.Schema({
       }],
     items_on_site_number: {
         type: Number,
-        required:true,
+        required:false,
 
     },
 

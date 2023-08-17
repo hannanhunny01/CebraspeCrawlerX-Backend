@@ -24,7 +24,9 @@ const pasUnbSchema = new mongoose.Schema({
       }],
     items_on_site_number: {
         type: Number,
-        required:false,
+        default:0,
+       
+        
 
     },
 

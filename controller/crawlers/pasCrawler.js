@@ -61,8 +61,30 @@ const pasMainPage = async (req,res,next) => {
     }
 }
 
-const pasPagesCrawler = async (req, res) => {
+const addPasdata = async (link,items) =>{
 
+
+  try{ 
+    console.log(link)
+    const pasObject = await  PasUnb.findOne({link_to_site:link})
+    if(pasObject && items.length > pasObject.items_on_site_number){
+      pasObject.items_on_site = items
+       await pasObject.save()
+    }
+    
+       
+    
+
+
+    
+  
+  }catch(error){
+    console.log(error)
+  }
+}
+
+
+const pasPagesCrawler = async (req, res) => {
   try {
     const pasLinks = await PasUnb.find({});
     const browser = await puppeteer.launch({ headless: false });
@@ -72,45 +94,53 @@ const pasPagesCrawler = async (req, res) => {
     const extractedData = []; // Array to store the extracted data
 
     for (const item of pasLinks) {
+      let currLink = item.link_to_site
       await page.goto(item.link_to_site);
       await delay(3000);
 
       const data = await page.evaluate(() => {
         const ulElements = document.querySelectorAll('ul.page-concursos__cargos-list');
-
-        const extractedItems = [];
+        const items = [];
 
         ulElements.forEach(ulElement => {
-          const liElements = ulElement.querySelectorAll('li');
-
+          const liElements = ulElement.querySelectorAll('li'); // Query within ulElement
+          
           liElements.forEach(liElement => {
-            const date = liElement.querySelector('h2').textContent;
-            const linkElement = liElement.querySelector('a');
-            const name = linkElement.textContent;
-            const link = linkElement.getAttribute('href');
+            const date = liElement.querySelector('div > h2').textContent;
+            const htmlref = liElement.querySelector('div > p').innerHTML
 
-            extractedItems.push({
-              date,
-              name,
-              link
-            });
+            const startIndex = htmlref.indexOf('href="') + 'href="'.length;
+            const endIndex = htmlref.indexOf('"', startIndex);
+            const link = htmlref.substring(startIndex, endIndex);
+
+
+            const name = liElement.querySelector('div > p ').textContent;
+
+            let crawledobject = { date, name, link }
+            if (crawledobject.date != "NENHUM LINK CADASTRADO"){
+                  items.push(crawledobject)
+            } 
+
+        
           });
         });
 
-        return extractedItems;
+       return items
       });
-
+      addPasdata(currLink,data);
+     
       extractedData.push(...data);
     }
-
-    console.log(extractedData);
+    res.json(extractedData)
 
     await browser.close();
-
   } catch (error) {
     console.log(error);
   }
 };
+
+
+
 
 
 

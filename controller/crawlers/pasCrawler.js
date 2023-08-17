@@ -33,7 +33,7 @@ const pasMainPage = async (req,res,next) => {
       return items;
     });
   
-    console.log(data);
+    
   
     await browser.close();
     req.items = data
@@ -61,9 +61,66 @@ const pasMainPage = async (req,res,next) => {
     }
 }
 
+const pasPagesCrawler = async (req, res) => {
+
+  try {
+    const pasLinks = await PasUnb.find({});
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    const extractedData = []; // Array to store the extracted data
+
+    for (const item of pasLinks) {
+      await page.goto(item.link_to_site);
+      await delay(3000);
+
+      const data = await page.evaluate(() => {
+        const ulElements = document.querySelectorAll('ul.page-concursos__cargos-list');
+
+        const extractedItems = [];
+
+        ulElements.forEach(ulElement => {
+          const liElements = ulElement.querySelectorAll('li');
+
+          liElements.forEach(liElement => {
+            const date = liElement.querySelector('h2').textContent;
+            const linkElement = liElement.querySelector('a');
+            const name = linkElement.textContent;
+            const link = linkElement.getAttribute('href');
+
+            extractedItems.push({
+              date,
+              name,
+              link
+            });
+          });
+        });
+
+        return extractedItems;
+      });
+
+      extractedData.push(...data);
+    }
+
+    console.log(extractedData);
+
+    await browser.close();
+
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 
 
 
 
-module.exports = {pasMainPage,updatePasOnDatabase}
+
+
+
+
+
+
+
+module.exports = {pasMainPage,updatePasOnDatabase,pasPagesCrawler}

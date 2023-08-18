@@ -8,7 +8,7 @@ const {adminProtect} =require('../middleware/adminProtect')
 const {pasMainPage,updatePasOnDatabase,pasPagesCrawler} = require ('../controller/crawlers/pasCrawler')
 
 const {vestMainPage,updateVesOnDatabase,vestPagesCrawler} = require('../controller/crawlers/vestCrawler')
-
+const {conMainPage,updateConOnDatabase,conPagesCrawler} = require('../controller/crawlers/concursoCrawler')
 
 // functions
 // pas crawlers
@@ -20,4 +20,8 @@ router.get("/crawlingEachPas",pasPagesCrawler)
 router.get("/crawlingModeVes/" ,vestMainPage,updateVesOnDatabase)
 router.get("/crawlingEachVest/" ,vestPagesCrawler)
 
+
+//concurso routes
+router.get("/crawlingModeCon/" ,conMainPage,updateConOnDatabase)
+router.get("/crawlingEachCon/",conPagesCrawler)
 module.exports = router;

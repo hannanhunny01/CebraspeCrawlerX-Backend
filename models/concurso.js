@@ -1,19 +1,27 @@
 const mongoose = require('mongoose')
 
-const vestUnbSchema = new mongoose.Schema({
-    name:{
+const concursoSchema = new mongoose.Schema({
+    nome:{
         type: String,
         required:true,
 
     },
+    vagas: {
+        type: String,
+        required:false,
+    },
 
+    remuneracao: {
+        type: String,
+        required:false,
+    },
     link_to_site: {
         type: String,
         required:true,
 
     },
     items_on_site:[{
-        date: String,
+        dates: String,
         name: String,
         link: String
       }],
@@ -27,6 +35,6 @@ const vestUnbSchema = new mongoose.Schema({
 
   });
 
-  const VestUnb = mongoose.model('VestUnb', vestUnbSchema);
+  const Concurso = mongoose.model('Concurso', concursoSchema);
 
-module.exports = VestUnb;
+module.exports = Concurso;

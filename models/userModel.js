@@ -29,7 +29,11 @@ const userSchema = new mongoose.Schema({
         required:false,
 
     },
-    VestUnb :{
+    vestUnb :{
+        type:[String],
+        required:false
+    },
+    concurso :{
         type:[String],
         required:false
     }

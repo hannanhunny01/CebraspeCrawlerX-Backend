@@ -33,7 +33,7 @@ const getMyVest = asyncHandler(async function (req, res) {
         const selectedFields = {
           _id: userVestItem._id,
           name: userVestItem.name, 
-          link_to_site: userConItem.link_to_site,
+          link_to_site: userVestItem.link_to_site,
         };
         vestObj.push(selectedFields);
       }

@@ -10,10 +10,16 @@ const {pasMainPage,updatePasOnDatabase,pasPagesCrawler} = require ('../controlle
 const {vestMainPage,updateVesOnDatabase,vestPagesCrawler} = require('../controller/crawlers/vestCrawler')
 const {conMainPage,updateConOnDatabase,conPagesCrawler} = require('../controller/crawlers/concursoCrawler')
 
+
+// message sending to admin
+const {sendCrawlStatus} = require('../controller/sendMessage/sendcrawlStatus')
+
+
+
 // functions
 // pas crawlers
 router.get("/getMainPas/" ,pasMainPage)
-router.get("/crawlingModePas/" ,pasMainPage,updatePasOnDatabase)
+router.get("/crawlingModePas/" ,pasMainPage,updatePasOnDatabase,sendCrawlStatus)
 router.get("/crawlingEachPas",pasPagesCrawler)
 
 // vest crawlers

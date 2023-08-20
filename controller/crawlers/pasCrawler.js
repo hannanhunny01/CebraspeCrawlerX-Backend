@@ -45,7 +45,7 @@ const pasMainPage = async (req,res,next) => {
   }
 
 
-  const updatePasOnDatabase = async (req, res) => {
+  const updatePasOnDatabase = async (req, res, next) => {
     try {
         for (const item of req.items) {
             const contains = await PasUnb.findOne({ stage_pas: item.stage_pas, year_pas: item.year_pas });
@@ -54,8 +54,10 @@ const pasMainPage = async (req,res,next) => {
                 await PasUnb.create(item);
             }
         }
-        
-        return res.status(200).json({ message: "Done successfully" });
+
+        req.crawler_type_message = "crawling sucessful on PasUNb"
+        next()
+      //  return res.status(200).json({ message: "Done successfully" });
     } catch (error) {
         return res.status(500).json({ message: "An error occurred" });
     }

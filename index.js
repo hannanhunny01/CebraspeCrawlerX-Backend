@@ -4,6 +4,7 @@ const dbConnect = require('./config/dbConnect');
 const authRouter = require('./routes/authRoute');
 const itemsRouter = require('./routes/itemsRoute')
 const crawlerRouter = require('./routes/crawlerRoute')
+const messageRouter = require('./routes/messageRoute')
 const dotenv = require('dotenv').config();
 
 const PORT = process.env.PORT || 4000;
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/user', authRouter);
 app.use('/api/items',itemsRouter)
 app.use('/api/crawler',crawlerRouter)
+app.use('/api/sendMessage',messageRouter)
 // Start the server
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);

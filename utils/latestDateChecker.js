@@ -21,9 +21,17 @@ function parseDate(dateStr) {
     }
   
     const parsedDates = dates.map(parseDate);
-    const latestDate = new Date(Math.max(...parsedDates));
+    const timestamps = parsedDates.map(date => date.getTime());
+    const latestTimestamp = Math.max(...timestamps);
+  
+    const latestDate = new Date(latestTimestamp);
     return formatDate(latestDate);
   }
+  
+  module.exports = { findLatestDate };
+  
+
+
   
   // Example usage:
   const datesVector = [
@@ -31,6 +39,8 @@ function parseDate(dateStr) {
     "17/01/2023 15:30",
     "17/01/2023 16:45",
   ];
+
+
   
   const latestDate = findLatestDate(datesVector);
   console.log("Latest Date:", latestDate);

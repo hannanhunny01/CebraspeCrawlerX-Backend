@@ -17,9 +17,7 @@ const sendMessagePas = asyncHandler(async function (req,res){
           let dates = all_titles.map(p=>p.date)
           const datesToSend =[]
           for(let i=item.items_on_site_number;i<item.items_on_site.length;i++){
-            if(item.stage_pas == "PAS 1" && item.year_pas == '2021'){
-                console.log(i)
-            }
+            
             const latestDate = findLatestDate(dates)
             datesToSend.push(latestDate)
             dates = dates.filter(item => item !== latestDate)
@@ -30,22 +28,41 @@ const sendMessagePas = asyncHandler(async function (req,res){
           const item_to_send = []
           for(const date of datesToSend){            
              const item_on_site= all_titles.filter(item => item.date == date)
-             item_to_send.push(item_on_site)
+            // console.log(item_on_site)
+             item_to_send.push(...item_on_site)
         }
 
         const people = await getUserZap(item.users)
-      
-        if (people){
+        if (people.lenght > 0){
           
-            data.push({nameOfObject:item.stage_pas+ +" "+ item.year_pas, updates:item_to_send ,people:people})
+            data.push({nameOfObject:item.stage_pas + " " + item.year_pas, updates:item_to_send ,people:people})
         }
     }
 
 }
+        if (data.length > 0){
+            const msgdata = await axios.post('http://localhost:4000/sendMessagePas', { data });
+            
+            // Return the response from the other server
+            if(msgdata.data.message){
+               for(const item of getPasUnb){
+                  item.items_on_site_number = item.items_on_site.length
+                  await item.save()
+               }
 
-        if (data){
-           return res.status(200).json({data})  
+                 
+
+                 return res.json(msgdata.data.message);
+            }else{
+                res.json({message:"notSent"});
+            }
+            
+        }else{
+            return res.json({message:"no new update"})
         }
+
+       
+           
     }
     catch(error){
         console.log(error)

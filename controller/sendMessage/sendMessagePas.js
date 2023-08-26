@@ -58,6 +58,7 @@ const sendMessagePas = asyncHandler(async function (req,res){
             }
             
         }else{
+            // to add function to send me msg for no new update
             return res.json({message:"no new update"})
         }
 

@@ -16,8 +16,8 @@ const loginUser = asyncHandler( async function (req,res){
         return res.status(401).json({message:"Empty data"})
         }
     const user = await User.findOne({email})
-  
     if (!user){
+
         return res.status(401).json({message:"User not exist"})
     }
    
@@ -28,7 +28,7 @@ const loginUser = asyncHandler( async function (req,res){
     }
 
     const token = signToken(user._id)
-
+    
     res.status(200).json({
         status:"success",
         token:token

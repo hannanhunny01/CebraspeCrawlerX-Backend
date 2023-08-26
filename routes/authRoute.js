@@ -7,6 +7,7 @@ const {forgotPassword ,resetPassword ,updatePassword} = require('../controller/u
 const {tokenValidator} = require('../middleware/tokenValidadtor')
 const {adminProtect} =require('../middleware/adminProtect')
 
+const {checkToken} = require('../controller/user/checkToken')
 
 
 router.post('/register', createUser);
@@ -14,7 +15,7 @@ router.post('/login',loginUser)
 
 router.get('/checkUser',checkUser)
 
-router.post('/checktoken',tokenValidator)
+router.get('/checkToken',checkToken)
 
 router.post('/admintoken',adminProtect)
 

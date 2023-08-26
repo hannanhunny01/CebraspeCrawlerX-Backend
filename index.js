@@ -9,10 +9,13 @@ const dotenv = require('dotenv').config();
 
 const PORT = process.env.PORT || 4000;
 const app = express();
-
+const cors = require('cors')
 // Connect to the database
 dbConnect();
-
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true, // If you need to include cookies in your requests
+  }));
 // Use body-parser middleware to parse JSON request bodies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

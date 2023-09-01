@@ -8,12 +8,12 @@ const {tokenValidator} = require('../middleware/tokenValidadtor')
 const {adminProtect} =require('../middleware/adminProtect')
 
 const {checkToken} = require('../controller/user/checkToken')
-
+const {sendCode} = require('../controller/user/sendCode')
 
 router.post('/register', createUser);
 router.post('/login',loginUser)
 
-router.get('/checkUser',checkUser)
+router.post('/checkUser',checkUser)
 
 router.get('/checkToken',checkToken)
 
@@ -24,5 +24,7 @@ router.post('/forgotPassword' ,forgotPassword)
 router.patch('/resetPassword/:token' ,resetPassword)
 
 router.patch('/changepassword',tokenValidator,updatePassword)
+
+router.post('/sendCode',sendCode)
 // Export the router
 module.exports = router;

@@ -33,14 +33,3 @@ function parseDate(dateStr) {
 
 
   
-  // Example usage:
-  const datesVector = [
-    "16/01/2023 10:00",
-    "17/01/2023 15:30",
-    "17/01/2023 16:45",
-  ];
-
-
-  
-  const latestDate = findLatestDate(datesVector);
-  console.log("Latest Date:", latestDate);

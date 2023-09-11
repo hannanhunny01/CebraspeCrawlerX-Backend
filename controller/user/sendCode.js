@@ -5,10 +5,12 @@ const axios = require('axios')
 
 const sendCode = async (req,res) =>{
 
-    try{
+     try{
     const number = req.body.phone
 
+    const checkNumber = await CodeSaver.findOne({phoneNumber:number})
     
+    if(!checkNumber){
     const sendRequest = await axios.post('http://localhost:4000/sendCode', { number });
     if(sendRequest.data.code){
         const verification = new CodeSaver({
@@ -21,6 +23,7 @@ const sendCode = async (req,res) =>{
         return res.status(200).json({message:"Mesagem enviada com Sucesso!"})
 
     }
+  }
 
     }catch(error){
         console.log(error)
@@ -34,12 +37,12 @@ const sendCode = async (req,res) =>{
 const checkCode = async  function(phone ,code){
   try{
 
-    const getPhone = await CodeSaver.findOne({phoneNumber:phone,verificationCode:code})
-    if(getPhone){
-       return true;
-
+    const getPhone = await CodeSaver.findOne({phoneNumber:phone})
+    if (getPhone.verificationCode == code){
+      return true
+    }else{
+      return false
     }
-        return false;
     
 
 

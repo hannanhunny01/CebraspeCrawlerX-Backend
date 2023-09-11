@@ -7,12 +7,23 @@ const asyncHandler = require("express-async-handler");
 const getAllCon = asyncHandler(async function (req,res){
     try{
       const allConObject = await Concurso.find({})
+      const user = await User.findById(req.id);
+     
 
-      const modifiedObjects = allConObject.map(obj => {
-        const { items_on_site, users,items_on_site_number, ...rest } = obj._doc;
-        return rest; 
-      });
-      return res.status(200).json(modifiedObjects)
+      if(user){
+        const usersIds = user.concurso;
+        const modifiedObjects = allConObject.map(obj => {
+          const { items_on_site, users,items_on_site_number, ...rest } = obj._doc;
+          return rest; 
+        });
+
+        const sendingObjects = modifiedObjects.filter( item => !usersIds.includes(item._id)   )
+
+        return res.status(200).json(sendingObjects)
+
+      }
+
+    
     }catch(error){
         console.log(error)
     }
@@ -76,7 +87,7 @@ const getMyCon = asyncHandler(async function (req, res) {
   const delteConByUser = asyncHandler(async function (req, res) {
     try {
       const user = await User.findById(req.id)
-
+       console.log("hello");
       if(user.concurso.includes(req.body.concursoId)){
         user.concurso.pull(req.body.concursoId);
         await user.save()

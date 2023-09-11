@@ -7,12 +7,24 @@ const asyncHandler = require("express-async-handler");
 const getAllVest = asyncHandler(async function (req,res){
     try{
       const allVestObject = await VestUnb.find({})
+      const user = await User.findById(req.id);
+      if(user){
+        const usersIds = user.vestUnb;
+
 
       const modifiedObjects = allVestObject.map(obj => {
         const { items_on_site, users,items_on_site_number, ...rest } = obj._doc;
         return rest; 
       });
-      return res.status(200).json(modifiedObjects)
+
+      const sendingObject = modifiedObjects.filter(item => !usersIds.includes(item._id))
+
+
+
+      return res.status(200).json(sendingObject)
+    
+    
+    }
     }catch(error){
         console.log(error)
         return res.status(500).json({message:"Internal server Error"})

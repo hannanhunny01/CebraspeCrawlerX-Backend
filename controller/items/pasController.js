@@ -7,13 +7,25 @@ const asyncHandler = require("express-async-handler");
 const getAllPas = asyncHandler(async function (req,res){
     try{
       const allPasObject = await PasUnb.find({})
+      const user = await User.findById(req.id);
+     
+
+      if(user){
+        const usersIds = user.pasUnb;
       
       const modifiedObjects = allPasObject.map(obj => {
         const { items_on_site, users,items_on_site_number, ...rest } = obj._doc;
         return rest; 
       });
 
-      return res.status(200).json(modifiedObjects)
+
+      const sendingObjects = modifiedObjects.filter( item => !usersIds.includes(item._id)   )
+
+      return res.status(200).json(sendingObjects)
+
+    }
+
+
     }catch(error){
         console.log(error)
     }

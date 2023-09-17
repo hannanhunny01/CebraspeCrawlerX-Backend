@@ -6,16 +6,18 @@ const axios = require('axios')
 const sendCode = async (req,res) =>{
 
      try{
-    const number = req.body.phone
+    const contactMethod = req.body.contactMethod
+    const contactValue  = req.body.contactValue
 
-    const checkNumber = await CodeSaver.findOne({phoneNumber:number})
+    const checkStatus = await CodeSaver.findOne({contactMethod:contactMethod,contactValue:contactValue})
     
-    if(!checkNumber){
-    const sendRequest = await axios.post('http://localhost:4000/sendCode', { number });
+    if(!checkStatus){
+    const sendRequest = await axios.post('http://localhost:4000/sendCode', { contactMethod ,contactValue });
     if(sendRequest.data.code){
         const verification = new CodeSaver({
-            phoneNumber: sendRequest.data.phone,
-            verificationCode: sendRequest.data.code
+            contactMethod:contactMethod,
+            contactValue:contactValue,
+            verificationCode:sendRequest.data.code         
           });
       
           // Save the verification document to the database
@@ -23,6 +25,8 @@ const sendCode = async (req,res) =>{
         return res.status(200).json({message:"Mesagem enviada com Sucesso!"})
 
     }
+  }else{
+    return res.status(401).json({message:"Message already sended wait to send Again"})
   }
 
     }catch(error){
@@ -34,10 +38,10 @@ const sendCode = async (req,res) =>{
 
 }
 
-const checkCode = async  function(phone ,code){
+const checkCode = async  function(contactMethod ,contactValue,code){
   try{
-
-    const getPhone = await CodeSaver.findOne({phoneNumber:phone})
+    
+    const getValue = await CodeSaver.findOne({contactMethod:contactMethod,contactValue:contactValue})
     if (getPhone.verificationCode == code){
       return true
     }else{

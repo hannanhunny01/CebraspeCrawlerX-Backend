@@ -48,6 +48,19 @@ const userSchema = new mongoose.Schema({
         required:false
     },
 
+    phoneNotifications: {
+        type: Boolean,
+        default: false,
+      },
+      telegramNotifications: {
+        type: Boolean,
+        default: false,
+      },
+      emailNotifications: {
+        type: Boolean,
+        default: false,
+      },
+
     passwordResetToken:String,
     passwordResetExpire:Date
 

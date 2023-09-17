@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 
 const verificationSchema = new mongoose.Schema({
-  phoneNumber: {
+  contactMethod: {
+    type: String,
+    enum: ['phone', 'email', 'telegram'],
+    required: true,
+  },
+  contactValue: {
     type: String,
     required: true,
     unique: true,

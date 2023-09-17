@@ -17,7 +17,11 @@ const userSchema = new mongoose.Schema({
     },
     phone : {
         type : String,
-        required : true
+        required : false
+    },
+    telegram:{
+         type:String,
+         required:false
     },
     isPremium :{
         type:Boolean,
@@ -43,6 +47,7 @@ const userSchema = new mongoose.Schema({
         default:false,
         required:false
     },
+
     passwordResetToken:String,
     passwordResetExpire:Date
 

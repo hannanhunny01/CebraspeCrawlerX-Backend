@@ -8,7 +8,7 @@ const {tokenValidator} = require('../middleware/tokenValidadtor')
 const {adminProtect} =require('../middleware/adminProtect')
 
 const {checkToken} = require('../controller/user/checkToken')
-const {sendCode} = require('../controller/user/sendCode')
+const {sendCode} = require('../controller/profileSetup/sendCode')
 
 router.post('/register', createUser);
 router.post('/login',loginUser)
@@ -25,6 +25,6 @@ router.patch('/resetPassword/:token' ,resetPassword)
 
 router.patch('/changepassword',tokenValidator,updatePassword)
 
-router.post('/sendCode',sendCode)
+router.post('/sendCode',sendCode)  // for email when doing first time 
 // Export the router
 module.exports = router;

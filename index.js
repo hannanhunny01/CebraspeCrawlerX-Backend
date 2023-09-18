@@ -5,6 +5,7 @@ const authRouter = require('./routes/authRoute');
 const itemsRouter = require('./routes/itemsRoute')
 const crawlerRouter = require('./routes/crawlerRoute')
 const messageRouter = require('./routes/messageRoute')
+const profilRoute = require('./routes/profileRoute')
 const dotenv = require('dotenv').config();
 
 const PORT = process.env.PORT || 4000;
@@ -28,6 +29,7 @@ app.use('/api/user', authRouter);
 app.use('/api/items',itemsRouter)
 app.use('/api/crawler',crawlerRouter)
 app.use('/api/sendMessage',messageRouter)
+app.use('/api/profile',profilRoute)
 // Start the server
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);

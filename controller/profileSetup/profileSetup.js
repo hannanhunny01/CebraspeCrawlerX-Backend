@@ -1,20 +1,59 @@
 const User = require('../../models/userModel');
 const CodeSaver = require('../../models/codeSaver');
-const {checkCode} = require('../user/sendCode')
+const {checkCode} = require('./sendCode')
 
 
+
+
+
+const sendUserProfile = async (req,res)=>{
+  try{
+    const user = await User.findById(req.id);
+    if (user){
+       const items =[]
+       if ( user.telegram ){
+        items.push({telegram:user.telegram,
+            status:user.telegramNotifications})
+       }else{
+        items.push({telegram:null,
+
+          status:user.telegramNotifications})
+       }
+       if(user.phone ){
+        items.push({phone:user.phone,
+        status:user.phoneNotifications})
+       }
+       if( user.email ){
+        items.push({email:user.email,
+        status:user.emailNotifications})
+       }
+
+
+       return res.status(200).json(items)
+
+
+
+
+
+
+    }
+
+
+  }catch(error){
+    console.log(error)
+  }
+}
 const registerNewProfile = async (req, res) => {
   try {
     if (req.body.contactMethod) {
       if(checkCode(req.body.contactMethod,req.body.contactValue,req.body.verificationCode)){      
         const user = await User.findById(req.id);
-
         if (user) {
           const method = req.body.contactMethod;
           user[method] = req.body.contactValue;
-          if(contactMethod === "phone"){
+          if(method === "phone"){
             user.phoneNotifications = true    
-          }else if(contactMethod ==="email") {
+          }else if(method ==="email") {
             user.emailNotifications = true   
           }else{
              user.telegramNotifications = true   
@@ -70,4 +109,4 @@ const updateNotifications = async (req,res) =>{
 
 }
 
-module.exports = registerNewProfile;
+module.exports = {registerNewProfile,updateNotifications,sendUserProfile};

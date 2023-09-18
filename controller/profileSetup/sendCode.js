@@ -42,7 +42,7 @@ const checkCode = async  function(contactMethod ,contactValue,code){
   try{
     
     const getValue = await CodeSaver.findOne({contactMethod:contactMethod,contactValue:contactValue})
-    if (getPhone.verificationCode == code){
+    if (getValue.verificationCode == code){
       return true
     }else{
       return false

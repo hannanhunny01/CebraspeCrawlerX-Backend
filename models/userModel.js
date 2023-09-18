@@ -17,11 +17,14 @@ const userSchema = new mongoose.Schema({
     },
     phone : {
         type : String,
-        required : false
+        required : false,
+        unique :true
     },
     telegram:{
          type:String,
-         required:false
+         required:false,
+         unique:true
+
     },
     isPremium :{
         type:Boolean,

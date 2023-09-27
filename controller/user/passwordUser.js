@@ -64,10 +64,11 @@ const resetPassword = asyncHandler(async (req, res ) => {
 const updatePassword = asyncHandler(async (req, res ) => {
     try{
         const user = await User.findById(req.id)
+
         const correct = await user.correctPassword(req.body.password,user.password)
         if(correct){
             user.password = req.body.newpassword
-            user.save()
+           await user.save()
             return res.status(200).json({message:"updated sucessfully"})
         }
 

@@ -9,7 +9,6 @@ const sendEmail = async options =>{
             pass: process.env.EMAIL_PASSWORD
         }
 
-        //activate in gmail ;
     })
 
     const mailOptions = {

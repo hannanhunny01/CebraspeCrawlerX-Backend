@@ -55,11 +55,11 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
       },
-      telegramNotifications: {
+    telegramNotifications: {
         type: Boolean,
         default: false,
       },
-      emailNotifications: {
+    emailNotifications: {
         type: Boolean,
         default: false,
       },

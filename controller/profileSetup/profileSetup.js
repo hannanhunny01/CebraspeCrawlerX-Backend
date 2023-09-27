@@ -8,28 +8,39 @@ const {checkCode} = require('./sendCode')
 
 const sendUserProfile = async (req,res)=>{
   try{
+    console.log("hell0")
     const user = await User.findById(req.id);
     if (user){
        const items =[]
        if ( user.telegram ){
-        items.push({telegram:user.telegram,
+        items.push({
+            name:"Telegram",
+            value:user.telegram,
             status:user.telegramNotifications})
        }else{
-        items.push({telegram:null,
-
+        items.push({
+          name:"Telegram",
+          value:null,
           status:user.telegramNotifications})
        }
        if(user.phone ){
-        items.push({phone:user.phone,
+        items.push({
+        name:"Whatsapp",
+        value:user.phone,
         status:user.phoneNotifications})
        }
        if( user.email ){
-        items.push({email:user.email,
-        status:user.emailNotifications})
+        
+        items.push({
+        name:"Email",
+        value:user.email,
+        status:user.emailNotifications
+      })
        }
 
-
-       return res.status(200).json(items)
+       return res.status(200).json({
+        name:user.username,
+        items:items})
 
 
 

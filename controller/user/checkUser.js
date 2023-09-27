@@ -10,9 +10,8 @@ const checkUser = asyncHandler(async (req, res) => {
   
     console.log(email,phone)
     const findUserEmail = await User.findOne({ email: email});
-    const findUserPhone = await  User.findOne({phone:phone})
     
-    if (findUserEmail ||  findUserPhone) {
+    if (findUserEmail) {
    
       res.status(401).json({message:"User Already Exist"});
     } else {

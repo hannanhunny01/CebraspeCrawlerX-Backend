@@ -7,9 +7,22 @@ const crawlerRouter = require('./routes/crawlerRoute')
 const messageRouter = require('./routes/messageRoute')
 const profilRoute = require('./routes/profileRoute')
 const dotenv = require('dotenv').config();
+const morgan = require('morgan');
 
 const PORT = process.env.PORT || 4000;
 const app = express();
+
+
+
+//let requestCounter = 0;
+
+// Create a custom token for morgan to log the request count
+//morgan.token('request-count', () => ++requestCounter);
+
+// Use morgan middleware to log requests
+//app.use(morgan(':method :url :status :response-time ms - Request #:request-count'));
+
+
 const cors = require('cors')
 // Connect to the database
 dbConnect();
@@ -21,7 +34,6 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Define a simple "hello" route
 
 
 // Use the authRouter for handling user-related routes
@@ -30,6 +42,10 @@ app.use('/api/items',itemsRouter)
 app.use('/api/crawler',crawlerRouter)
 app.use('/api/sendMessage',messageRouter)
 app.use('/api/profile',profilRoute)
+
+//morgan to see request in consolelog
+
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);

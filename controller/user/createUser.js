@@ -4,7 +4,9 @@ const User = require('../../models/userModel')
 const asyncHandler = require("express-async-handler");
 const jwt = require('jsonwebtoken')
 const {checkCode} = require('../profileSetup/sendCode')
-const createUser = asyncHandler(async (req, res) => {
+const createUser = async (req, res) => {
+
+  try{
     /**
      * TODO:Get the email from req.body
      */
@@ -16,12 +18,14 @@ const createUser = asyncHandler(async (req, res) => {
     
     if (!findUser) {
       /**
-       * TODO:if user not found user create a new user
+       * if user not found user create a new user
        */
-      if(await checkCode(req.body.email,req.body.code)){
+      if(await checkCode("email",req.body.email,req.body.code)){
         
-         const {username,email,password} = req.body
+        const {username,email,password} = req.body
         const newUser = await User.create({username,email,password});
+        newUser.emailNotifications= true;
+        await newUser.save();
         const token = jwt.sign({id: newUser._id} , process.env.JWT_SECRET,{expiresIn:process.env.JWT_EXPIRES_IN});
 
          return res.status(200).json({message:"Regsitered SucessFully"})
@@ -35,7 +39,7 @@ const createUser = asyncHandler(async (req, res) => {
       );
       } else {
        
-        return res.status(401).json({message:"invalid code"})
+        return res.status(401).json({message:"Codigo nao esta Valido"})
         throw new Error("User Already Exists");
       }
 
@@ -43,7 +47,11 @@ const createUser = asyncHandler(async (req, res) => {
       }
       return res.status(401).json({message:"User already Exist"})
    
-  });
+  } catch(error){
+    console.log(error)
+  };}
+  
+ 
 
 
 module.exports={createUser};

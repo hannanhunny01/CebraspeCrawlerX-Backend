@@ -20,11 +20,12 @@ exports.adminProtect = asyncHandler(async (req, res, next) => {
         if (!freshUser) {
             return res.status(401).json({ message: 'User not found' });
         }
-
-        req.user = freshUser;
+        req.id = freshUser.id
+        req.username = freshUser.username;
 
         if (freshUser.isAdmin) {
-            return res.status(200).json(freshUser)
+            next();
+           // return res.status(200).json(freshUser)
         } else {
             return res.status(403).json({ message: 'Access denied: Admin privileges required' });
         }

@@ -7,6 +7,7 @@ const { response } = require('express');
 const forgotPassword = asyncHandler(async (req, res) => {
    
     try{
+        console.log('eakwljelkwej')
     const user = await User.findOne({email:req.body.email})
     if(!user){
         return res.status(404).json({message:"User not Found"});
@@ -14,7 +15,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const resetToken = user.createPasswordResetToken()
     await user.save()
 
-    const resetUrl =`${req.protocol}://${req.get('host')}/api/user/resetPassword/${resetToken}`
+    const resetUrl =`${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`
 
     const message = `forgot your password reset your password on  ${resetUrl}`
     await sendEmail({
@@ -22,7 +23,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
         subject:"you password reset token valid for 10 minutes",
         message 
     })
-    return res.status(200).json({message:"message sent sucessfully"})}
+    return res.status(200).json({message:"Link para Definir novo Senha foi enviado para este Email"})}
     catch(error){
         console.log(error)
         return res.status(401).json({ message: 'Invalid or Empty email' });
@@ -49,7 +50,7 @@ const resetPassword = asyncHandler(async (req, res ) => {
     user.passwordResetToken = undefined;
     await user.save();
 
-    return res.json(user)
+    return res.status(200).json({message:"Reset SuccessFully"})
 
 
 
@@ -69,10 +70,10 @@ const updatePassword = asyncHandler(async (req, res ) => {
         if(correct){
             user.password = req.body.newpassword
            await user.save()
-            return res.status(200).json({message:"updated sucessfully"})
+            return res.status(200).json({message:"Senha atualizado com Sucesso"})
         }
 
-        return res.status(401).json({message:"invalid"})
+        return res.status(401).json({message:"Senha Invalido"})
 
 
 

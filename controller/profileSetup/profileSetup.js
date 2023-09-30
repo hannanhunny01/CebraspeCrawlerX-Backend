@@ -8,7 +8,6 @@ const {checkCode} = require('./sendCode')
 
 const sendUserProfile = async (req,res)=>{
   try{
-    console.log("hell0")
     const user = await User.findById(req.id);
     if (user){
        const items =[]
@@ -28,6 +27,11 @@ const sendUserProfile = async (req,res)=>{
         name:"Whatsapp",
         value:user.phone,
         status:user.phoneNotifications})
+       }else{
+        items.push({
+          name:"Whatsapp",
+          value:null,
+          status:user.phoneNotifications})
        }
        if( user.email ){
         
@@ -94,22 +98,40 @@ const updateNotifications = async (req,res) =>{
     const contactMethod = req.body.contactMethod
     if(user && contactMethod in user){
       if(contactMethod === "phone"){
-        user.phoneNotifications = req.body.newValue
+        if(user.phone){
+          user.phoneNotifications = req.body.newValue
+        }else{
+            return res.status(401).json({message:"Você precisa se registrar primeiro para ativar as notificações"});
+
+        }
+        
 
       }else if(contactMethod ==="email") {
-        user.emailNotifications = req.body.newValue
+        if(user.email){
+          user.emailNotifications = req.body.newValue
 
-      }else{
-         user.telegramNotifications = req.body.newValue
+        }else{
+          return res.status(401).json({message:"Você precisa se registrar primeiro para ativar as notificações"});
+
+      }
+
+      }else {
+        if(user.telegram){
+          user.telegramNotifications = req.body.newValue
+        }else{
+          return res.status(401).json({message:"Você precisa se registrar primeiro para ativar as notificações"});
+
+      }
+        
 
       }
       await user.save();
-       return res.status(200).json({message:"Updated SucessFully"});
+       return res.status(200).json({message:"Atualizado com Sucesso"});
        
 
     }else{
 
-      return res.status(401).json({message:"Register First"})
+      return res.status(401).json({message:"Você precisa se registrar primeiro para ativar as notificações"})
     }
 
 

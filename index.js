@@ -1,11 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const dbConnect = require('./config/dbConnect');
+
 const authRouter = require('./routes/authRoute');
 const itemsRouter = require('./routes/itemsRoute')
 const crawlerRouter = require('./routes/crawlerRoute')
 const messageRouter = require('./routes/messageRoute')
 const profilRoute = require('./routes/profileRoute')
+const message = require('./routes/message')
+
+
 const dotenv = require('dotenv').config();
 const morgan = require('morgan');
 
@@ -24,12 +28,13 @@ const app = express();
 
 
 const cors = require('cors')
-// Connect to the database
+
 dbConnect();
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true, // If you need to include cookies in your requests
   }));
+
 // Use body-parser middleware to parse JSON request bodies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -42,6 +47,7 @@ app.use('/api/items',itemsRouter)
 app.use('/api/crawler',crawlerRouter)
 app.use('/api/sendMessage',messageRouter)
 app.use('/api/profile',profilRoute)
+app.use('/api/',message)
 
 //morgan to see request in consolelog
 

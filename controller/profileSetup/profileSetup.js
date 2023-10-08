@@ -61,7 +61,7 @@ const sendUserProfile = async (req,res)=>{
 const registerNewProfile = async (req, res) => {
   try {
     if (req.body.contactMethod) {
-      if(checkCode(req.body.contactMethod,req.body.contactValue,req.body.verificationCode)){      
+      if(await checkCode(req.body.contactMethod,req.body.contactValue,req.body.verificationCode)){      
         const user = await User.findById(req.id);
         if (user) {
           const method = req.body.contactMethod;
@@ -76,17 +76,17 @@ const registerNewProfile = async (req, res) => {
           await user.save();
           return res.status(200).json({ message: 'Profile updated successfully' });
         } else {
-          return res.status(404).json({ error: 'User not found' });
+          return res.status(404).json({ message: 'User not found' });
         }
       } else {
-        return res.status(400).json({ error: 'Invalid verification code' });
+        return res.status(400).json({ message: 'Invalid verification code' });
       }
     } else {
-      return res.status(400).json({ error: 'Identity not provided' });
+      return res.status(400).json({ message: 'Identity not provided' });
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 

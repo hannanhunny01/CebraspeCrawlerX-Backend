@@ -24,7 +24,6 @@ const makeLicense = async (req,res) =>{
   try{
     const email = req.body.email;
     const findUser = await User.findOne({email:email})
-    console.log(findUser);
     if (findUser){
 
 
@@ -75,7 +74,8 @@ const checkLicense = async (req,res) =>{
     try{
 
         const license = await License.findOne({issuedTo:req.id})
-        if (license && req.body.accessKey === license.licenseKey ){
+    
+        if (license && req.body.accessToken === license.licenseKey ){
 
           return res.status(200).json({message:"Chave verificada com Sucesso"}) 
 

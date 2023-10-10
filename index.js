@@ -7,7 +7,7 @@ const itemsRouter = require('./routes/itemsRoute')
 const crawlerRouter = require('./routes/crawlerRoute')
 const messageRouter = require('./routes/messageRoute')
 const profilRoute = require('./routes/profileRoute')
-const message = require('./routes/message')
+const messageAndStatus = require('./routes/messageAndStatusRoute')
 
 
 const dotenv = require('dotenv').config();
@@ -18,13 +18,13 @@ const app = express();
 
 
 
-//let requestCounter = 0;
+let requestCounter = 0;
 
-// Create a custom token for morgan to log the request count
-//morgan.token('request-count', () => ++requestCounter);
+ //Create a custom token for morgan to log the request count
+morgan.token('request-count', () => ++requestCounter);
 
 // Use morgan middleware to log requests
-//app.use(morgan(':method :url :status :response-time ms - Request #:request-count'));
+app.use(morgan(':method :url :status :response-time ms - Request #:request-count'));
 
 
 const cors = require('cors')
@@ -47,7 +47,7 @@ app.use('/api/items',itemsRouter)
 app.use('/api/crawler',crawlerRouter)
 app.use('/api/sendMessage',messageRouter)
 app.use('/api/profile',profilRoute)
-app.use('/api/',message)
+app.use('/api/',messageAndStatus)
 
 //morgan to see request in consolelog
 

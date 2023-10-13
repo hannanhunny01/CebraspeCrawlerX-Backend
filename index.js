@@ -18,20 +18,26 @@ const app = express();
 
 
 
-let requestCounter = 0;
+//let requestCounter = 0;
 
  //Create a custom token for morgan to log the request count
-morgan.token('request-count', () => ++requestCounter);
+//morgan.token('request-count', () => ++requestCounter);
 
 // Use morgan middleware to log requests
-app.use(morgan(':method :url :status :response-time ms - Request #:request-count'));
+//app.use(morgan(':method :url :status :response-time ms - Request #:request-count'));
 
 
 const cors = require('cors')
 
 dbConnect();
-app.use(cors({
-    origin: 'http://localhost:5173',
+//app.use(cors({
+  //  origin: 'http://localhost:5173',
+   // credentials: true, // If you need to include cookies in your requests
+////  }));
+
+
+  app.use(cors({
+    origin: '*',
     credentials: true, // If you need to include cookies in your requests
   }));
 

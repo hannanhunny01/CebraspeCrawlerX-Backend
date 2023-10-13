@@ -74,7 +74,6 @@ const checkLicense = async (req,res) =>{
     try{
 
         const license = await License.findOne({issuedTo:req.id})
-    
         if (license && req.body.accessToken === license.licenseKey ){
 
           return res.status(200).json({message:"Chave verificada com Sucesso"}) 

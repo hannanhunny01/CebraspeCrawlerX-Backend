@@ -56,8 +56,8 @@ const pasMainPage = async (req,res,next) => {
         }
 
         req.crawler_type_message = "crawling sucessful on PasUNb"
-        next()
-      //  return res.status(200).json({ message: "Done successfully" });
+     //   next()
+        return res.status(200).json({ message: "Done successfully" });
     } catch (error) {
         return res.status(500).json({ message: "An error occurred" });
     }

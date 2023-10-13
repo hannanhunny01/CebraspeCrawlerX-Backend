@@ -19,7 +19,7 @@ const {sendCrawlStatus} = require('../controller/sendMessage/sendcrawlStatus')
 // functions
 // pas crawlers
 router.get("/getMainPas/" ,pasMainPage)
-router.get("/crawlingModePas/" ,pasMainPage,updatePasOnDatabase,sendCrawlStatus)
+router.get("/crawlingModePas/" ,pasMainPage,updatePasOnDatabase)
 router.get("/crawlingEachPas",pasPagesCrawler)
 
 // vest crawlers

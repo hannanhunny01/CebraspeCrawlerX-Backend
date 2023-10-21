@@ -21,7 +21,7 @@ const concursoSchema = new mongoose.Schema({
 
     },
     items_on_site:[{
-        dates: String,
+        date: String,
         name: String,
         link: String
       }],

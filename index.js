@@ -62,7 +62,8 @@ app.use('/api/profile',profilRoute)
 app.use('/api/',messageAndStatus)
 
 //morgan to see request in consolelog
-// cron.schedule('*/2 * * * *', schedulerTwo);
+
+ //cron.schedule('*/1 * * * *', schedulerTwo);
 
 
 // Start the server

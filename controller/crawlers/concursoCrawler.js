@@ -3,10 +3,10 @@ const Concurso = require('../../models/concurso')
 const User = require('../../models/userModel')
 const puppeteer = require('puppeteer');
 
-const conMainPage = async (req,res,next) => {
+const conMainPage = async () => {
 
     try{
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({headless:false});
     const page = await browser.newPage();
     
     await page.goto('https://www.cebraspe.org.br/concursos/'); 
@@ -38,9 +38,14 @@ const conMainPage = async (req,res,next) => {
     });
   
     
-    console.log(data)
+   
     await browser.close();
-    req.items = data
+    updateConOnDatabase(data)
+  //   req.items = data
+    // ffdsf
+    console.log("concurso Sucess")
+    return true;
+
     next();
  //   return res.status(200).json(data)
 }   catch(error){
@@ -49,18 +54,21 @@ const conMainPage = async (req,res,next) => {
   }
 
 
-const updateConOnDatabase = async (req, res) => {
+const updateConOnDatabase = async (items) => {
     try {
-        for (const item of req.items) {
+        for (const item of items) {
             const contains = await Concurso.findOne({ name: item.name, link_to_site: item.link_to_site });
             
             if (!contains) {
                 await Concurso.create(item);
             }
         }
+
+        return true
         
         return res.status(200).json({ message: "Done successfully" });
     } catch (error) {
+        return false
         return res.status(500).json({ message: "An error occurred" });
     }
 }
@@ -140,10 +148,12 @@ const addConData = async (link,items) =>{
        
         extractedData.push(...data);
       }
-      res.json(extractedData)
+     // res.json(extractedData)
   
       await browser.close();
+      return true;
     } catch (error) {
+      return false;
       console.log(error);
     }
   };

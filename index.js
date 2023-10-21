@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const dbConnect = require('./config/dbConnect');
 
+
+// Routes
 const authRouter = require('./routes/authRoute');
 const itemsRouter = require('./routes/itemsRoute')
 const crawlerRouter = require('./routes/crawlerRoute')
@@ -12,6 +14,10 @@ const messageAndStatus = require('./routes/messageAndStatusRoute')
 
 const dotenv = require('dotenv').config();
 const morgan = require('morgan');
+
+// schedulers
+const cron = require('node-cron');
+const {schedulerOne,schedulerTwo} = require('./controller/crawlerSchduler/crawlerScheduler')
 
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -56,6 +62,7 @@ app.use('/api/profile',profilRoute)
 app.use('/api/',messageAndStatus)
 
 //morgan to see request in consolelog
+// cron.schedule('*/2 * * * *', schedulerTwo);
 
 
 // Start the server

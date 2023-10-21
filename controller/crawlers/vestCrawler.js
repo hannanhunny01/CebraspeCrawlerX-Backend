@@ -3,10 +3,10 @@ const VestUnb = require('../../models/vestibular')
 const User = require('../../models/userModel')
 const puppeteer = require('puppeteer');
 
-const vestMainPage = async (req,res,next) => {
+const vestMainPage = async () => {
 
     try{
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({headless:false});
     const page = await browser.newPage();
     
     await page.goto('https://www.cebraspe.org.br/vestibulares/'); 
@@ -33,29 +33,34 @@ const vestMainPage = async (req,res,next) => {
     });
   
     
-    console.log(data)
+  //  console.log(data)
     await browser.close();
-    req.items = data
-    next();
- //   return res.status(200).json(data)
+
+    if( updateVesOnDatabase(data)){
+      return true
+    }else{
+      return false
+    }
+   
 }   catch(error){
-    return res.status(500).json({message:"internal server Error"})
+  return false
 }
   }
 
 
-const updateVesOnDatabase = async (req, res) => {
+const updateVesOnDatabase = async (items) => {
     try {
-        for (const item of req.items) {
+        for (const item of items) {
             const contains = await VestUnb.findOne({ name: item.name, link_to_site: item.link_to_site });
             
             if (!contains) {
                 await VestUnb.create(item);
             }
         }
-        
-        return res.status(200).json({ message: "Done successfully" });
+        return true
+       // return res.status(200).json({ message: "Done successfully" });
     } catch (error) {
+      return false;
         return res.status(500).json({ message: "An error occurred" });
     }
 }
@@ -137,10 +142,13 @@ const addVestdata = async (link,items) =>{
        
         extractedData.push(...data);
       }
-      res.json(extractedData)
+    //  res.json(extractedData)
   
       await browser.close();
+
+      return true;
     } catch (error) {
+      return false;
       console.log(error);
     }
   };

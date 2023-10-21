@@ -2,10 +2,10 @@ const PasUnb = require('../../models/pasunb')
 const User = require('../../models/userModel')
 const puppeteer = require('puppeteer');
 
-const pasMainPage = async (req,res,next) => {
+const pasMainPage = async () => {
 
     try{
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({headless:false});
     const page = await browser.newPage();
   
     await page.goto('https://www.cebraspe.org.br/pas/subprogramas/'); // Replace with the URL of the webpage you want to scrape
@@ -36,29 +36,39 @@ const pasMainPage = async (req,res,next) => {
     
   
     await browser.close();
+    updatePasOnDatabase(data)
+    console.log("pas Sucess")
+
+    return true
+
     req.items = data
     next();
  //   return res.status(200).json(data)
 }   catch(error){
+  return false
     return res.status(500).json({message:"internal server Error"})
 }
   }
 
 
-  const updatePasOnDatabase = async (req, res, next) => {
+  const updatePasOnDatabase = async (items) => {
     try {
-        for (const item of req.items) {
+        for (const item of items) {
             const contains = await PasUnb.findOne({ stage_pas: item.stage_pas, year_pas: item.year_pas });
             
             if (!contains) {
                 await PasUnb.create(item);
             }
         }
+        return true
+
 
         req.crawler_type_message = "crawling sucessful on PasUNb"
      //   next()
+    
         return res.status(200).json({ message: "Done successfully" });
     } catch (error) {
+      return false
         return res.status(500).json({ message: "An error occurred" });
     }
 }
@@ -86,7 +96,7 @@ const addPasdata = async (link,items) =>{
 }
 
 
-const pasPagesCrawler = async (req, res) => {
+const pasPagesCrawler = async () => {
   try {
     const pasLinks = await PasUnb.find({});
     const browser = await puppeteer.launch({ headless: false });
@@ -133,10 +143,13 @@ const pasPagesCrawler = async (req, res) => {
      
       extractedData.push(...data);
     }
-    res.json(extractedData)
+   // res.json(extractedData)
 
     await browser.close();
+    return true;
+
   } catch (error) {
+    return false;
     console.log(error);
   }
 };

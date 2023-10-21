@@ -1,18 +1,32 @@
 const cron = require('node-cron');
 
-const { pasMainPage } = require('../crawlers/pasCrawler');
-const { vestMainPage } = require('../crawlers/vestCrawler');
-const { conMainPage } = require('../crawlers/concursoCrawler');
+const { pasMainPage, pasPagesCrawler} = require('../crawlers/pasCrawler');
+const { vestMainPage,vestPagesCrawler } = require('../crawlers/vestCrawler');
+const { conMainPage,conPagesCrawler  } = require('../crawlers/concursoCrawler');
 
-const mainPageScheduler = [pasMainPage, vestMainPage, conMainPage];
 
-const maxRetries = 3;
+
+async function  testFunction  (){
+  await new Promise((resolve) => {
+    setTimeout(() => {
+        console.log("testing");
+        resolve();
+    }, 3000);
+   });
+    return false;
+}
+
+const mainPageScheduler = [testFunction,pasMainPage, vestMainPage, conMainPage];
+const allPageScheduler = [pasPagesCrawler, vestPagesCrawler, conPagesCrawler];
 
 // Object to store retry counts for each function
-const retryCounts = {};
 
-async function checkMainPageCebraspe() {
-  functionStack = [...mainPageScheduler]
+async function checkMainPageCebraspe(items) {
+  const maxRetries = 3;
+  const retryCounts = {};
+
+  console.log("running now")
+  const functionStack = [...items]
   for (let i = 0; i < functionStack.length; ) {
     const func = functionStack[i];
 
@@ -24,6 +38,7 @@ async function checkMainPageCebraspe() {
       if (await func()) {
    // If the function returns true, remove it from the stack
         functionStack.splice(i, 1);
+
         delete retryCounts[func];
       } else {
    // If the function returns false, move it to the end of the stack
@@ -34,12 +49,31 @@ async function checkMainPageCebraspe() {
     } else {
      // Remove the function if it has reached the maximum retries
       functionStack.splice(i, 1);
+
       delete retryCounts[func];
     }
   }
+
 }
 
 
-cron.schedule('0 */3 * * *', checkMainPageCebraspe);
 
-cron.start();
+
+const schedulerOne =()=>{
+  checkMainPageCebraspe(mainPageScheduler)
+}
+
+const schedulerTwo =()=>{
+  checkMainPageCebraspe(allPageScheduler)
+}
+
+
+
+//cron.schedule('*/1 * * * *', schedulerOne);
+//cron.schedule('*/2 * * * *', ()=>checkMainPageCebraspe(allPageScheduler));
+
+
+
+//cron.start();
+
+module.exports = {schedulerOne,schedulerTwo}

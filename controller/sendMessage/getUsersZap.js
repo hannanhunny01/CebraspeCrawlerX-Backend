@@ -1,14 +1,38 @@
 
 const User = require('../../models/userModel')
 
-const getUserZap = async  function (userIds){
+const getUser = async  function (userIds){
+
+   try{
  const users = await User.find({ _id: { $in: userIds } })
- const zaps=[]
+ const contacts=[]
  for (const user of users){
-    zaps.push({name:user.username , whatsapp:user.phone})
- }
- return zaps
+   const person ={}
+  
+    if(user.phone !== undefined && user.phoneNotifications === true){
+       person.name = user.username;
+       person.whatsapp = user.phone
+    }
+    if(user.telegram!== undefined && user.telegramNotifications === true){
+      person.name = user.username;
+      person.telegram = user.telegram
+ }  
+   if(user.email !== undefined && user.emailNotifications === true){
+      person.name = user.username;
+      person.email = user.email
+   }
+   if(person.name !== undefined){
+   contacts.push(person);
+   }
+
 
 }
 
-module.exports = {getUserZap}
+return contacts
+   }catch(error){
+         console.log(error)
+   }
+
+}
+
+module.exports = {getUser}

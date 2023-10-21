@@ -17,7 +17,7 @@ const morgan = require('morgan');
 
 // schedulers
 const cron = require('node-cron');
-const {schedulerOne,schedulerTwo} = require('./controller/crawlerSchduler/crawlerScheduler')
+const {schedulerOne,schedulerTwo} = require('./crawlerSchduler/crawlerScheduler')
 
 const PORT = process.env.PORT || 4000;
 const app = express();

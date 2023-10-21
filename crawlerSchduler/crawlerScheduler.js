@@ -1,8 +1,8 @@
 const cron = require('node-cron');
 
-const { pasMainPage, pasPagesCrawler} = require('../crawlers/pasCrawler');
-const { vestMainPage,vestPagesCrawler } = require('../crawlers/vestCrawler');
-const { conMainPage,conPagesCrawler  } = require('../crawlers/concursoCrawler');
+const { pasMainPage, pasPagesCrawler} = require('../controller/crawlers/pasCrawler');
+const { vestMainPage,vestPagesCrawler } = require('../controller/crawlers/vestCrawler');
+const { conMainPage,conPagesCrawler  } = require('../controller/crawlers/concursoCrawler');
 
 
 

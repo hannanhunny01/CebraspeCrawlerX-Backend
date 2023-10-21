@@ -4,7 +4,7 @@ const asyncHandler = require("express-async-handler");
 const axios = require('axios');
 const { findLatestDate } = require('../../utils/latestDateChecker')
 
-const {getUserZap} = require('./getUsersZap')
+const {getUser} = require('./getUsersZap')
 const sendMessagePas = asyncHandler(async function (req,res){
      try{
     const getPasUnb  = await  PasUnb.find({})
@@ -32,15 +32,20 @@ const sendMessagePas = asyncHandler(async function (req,res){
              item_to_send.push(...item_on_site)
         }
 
-        const people = await getUserZap(item.users)
-        if (people.lenght > 0){
+
+        const people = await getUser(item.users)
+     
+        if (people.length > 0){
           
             data.push({nameOfObject:item.stage_pas + " " + item.year_pas, updates:item_to_send ,people:people})
+            
         }
     }
 
 }
         if (data.length > 0){
+
+            return res.json(data)
             const msgdata = await axios.post('http://localhost:4000/sendMessagePas', { data });
             
             // Return the response from the other server

@@ -1,79 +1,62 @@
-const User = require('../../models/userModel')
-const PasUnb = require('../../models/pasunb')
+const User = require('../../models/userModel');
+const PasUnb = require('../../models/pasunb');
 const asyncHandler = require("express-async-handler");
 const axios = require('axios');
-const { findLatestDate } = require('../../utils/latestDateChecker')
+const { findLatestDate } = require('../../utils/latestDateChecker');
 
-const {getUser} = require('./getUsersZap')
-const sendMessagePas = asyncHandler(async function (req,res){
-     try{
-    const getPasUnb  = await  PasUnb.find({})
-    const data =[]
-    for(const item of getPasUnb){
-        if(item.items_on_site_number<item.items_on_site.length){
+const { getUser } = require('./getUsersZap');
 
-         
-          const all_titles= item.items_on_site
-          let dates = all_titles.map(p=>p.date)
-          const datesToSend =[]
-          for(let i=item.items_on_site_number;i<item.items_on_site.length;i++){
-            
-            const latestDate = findLatestDate(dates)
-            datesToSend.push(latestDate)
-            dates = dates.filter(item => item !== latestDate)
+const sendMessagePas = asyncHandler(async function (req, res) {
+  try {
+    const getPasUnb = await PasUnb.find({});
+    const data = [];
 
+    for (const item of getPasUnb) {
+      if (item.items_on_site_number < item.items_on_site.length) {
+        const all_titles = item.items_on_site;
+        let dates = all_titles.map(p => p.date);
+        const datesToSend = [];
 
-          }
-          
-          const item_to_send = []
-          for(const date of datesToSend){            
-             const item_on_site= all_titles.filter(item => item.date == date)
-            // console.log(item_on_site)
-             item_to_send.push(...item_on_site)
+        for (let i = item.items_on_site_number; i < item.items_on_site.length; i++) {
+          const latestDate = findLatestDate(dates);
+          datesToSend.push(latestDate);
+          dates = dates.filter(item => item !== latestDate);
         }
 
-
-        const people = await getUser(item.users)
-     
-        if (people.length > 0){
-          
-            data.push({nameOfObject:item.stage_pas + " " + item.year_pas, updates:item_to_send ,people:people})
-            
-        }
-    }
-
-}
-        if (data.length > 0){
-
-            return res.json(data)
-            const msgdata = await axios.post('http://localhost:4000/sendMessagePas', { data });
-            
-            // Return the response from the other server
-            if(msgdata.data.message){
-               for(const item of getPasUnb){
-                  item.items_on_site_number = item.items_on_site.length
-                  await item.save()
-               }
-
-                 
-
-                 return res.json(msgdata.data.message);
-            }else{
-                res.json({message:"notSent"});
-            }
-            
-        }else{
-            // to add function to send me msg for no new update
-            return res.json({message:"no new update"})
+        const item_to_send = [];
+        for (const date of datesToSend) {
+          const item_on_site = all_titles.filter(item => item.date == date);
+          item_to_send.push(...item_on_site);
         }
 
-       
-           
-    }
-    catch(error){
-        console.log(error)
+        const people = await getUser(item.users);
+
+        if (people.length > 0) {
+          data.push({ nameOfObject: item.stage_pas + " " + item.year_pas, updates: item_to_send, people: people });
+        }
+      }
     }
 
-})
+    if (data.length > 0) {
+      const sendRequest = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({item:data})
+      };
 
-module.exports = {sendMessagePas}
+      // Make the POST request to the desired endpoint
+      const msgdata = await  fetch('http://localhost:4000/api/message/sendMessage', sendRequest);
+      const answer = await msgdata.json();  
+      return res.json(answer);
+    } else {
+      res.json({ message: "notSent" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+module.exports = { sendMessagePas };

@@ -3,10 +3,14 @@ const Concurso = require('../../models/concurso')
 const User = require('../../models/userModel')
 const puppeteer = require('puppeteer');
 
+
+const {errorStatus} = require('../../ErrorStatus/errorStatus')
+const {updateStatus} = require('../messageAndStatus/updateStatus')
+
 const conMainPage = async () => {
+  const browser = await puppeteer.launch({headless:false});
 
     try{
-    const browser = await puppeteer.launch({headless:false});
     const page = await browser.newPage();
     
     await page.goto('https://www.cebraspe.org.br/concursos/'); 
@@ -33,7 +37,6 @@ const conMainPage = async () => {
           });
         });
       });
-  
       return items;
     });
   
@@ -42,15 +45,24 @@ const conMainPage = async () => {
     await browser.close();
     updateConOnDatabase(data)
   //   req.items = data
-    // ffdsf
+    updateStatus(true,"conMainPage",new Date())
     console.log("concurso Sucess")
     return true;
 
     next();
  //   return res.status(200).json(data)
 }   catch(error){
-    return res.status(500).json({message:"internal server Error"})
-}
+    updateStatus(false,"Sucess for mainPage Concurso",new Date())
+    errorStatus("conMainPage",error)
+    return false
+  }
+  finally{
+    if(browser){
+      await browser.close()
+    }
+  }
+
+
   }
 
 

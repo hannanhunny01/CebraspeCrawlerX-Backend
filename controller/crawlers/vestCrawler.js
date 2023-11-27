@@ -3,10 +3,15 @@ const VestUnb = require('../../models/vestibular')
 const User = require('../../models/userModel')
 const puppeteer = require('puppeteer');
 
+// errorStatus and SystemStatus
+const {errorStatus} = require('../../ErrorStatus/errorStatus')
+const {updateStatus} = require('../messageAndStatus/updateStatus')
+
+
 const vestMainPage = async () => {
+  const browser = await puppeteer.launch({headless:false});
 
     try{
-    const browser = await puppeteer.launch({headless:false});
     const page = await browser.newPage();
     
     await page.goto('https://www.cebraspe.org.br/vestibulares/'); 
@@ -28,22 +33,30 @@ const vestMainPage = async () => {
           });
         });
       });
-  
       return items;
     });
   
     
   //  console.log(data)
     await browser.close();
+    updateStatus(true,"vestMainPage",new Date())
 
-    if( updateVesOnDatabase(data)){
+    if( await updateVesOnDatabase(data)){
       return true
     }else{
       return false
     }
    
 }   catch(error){
+  console.log(error)
+  updateStatus(false,"Success for main page VEstibular",new Date())
+  errorStatus("vestMainPage",error)
   return false
+}
+finally{
+  if(browser){
+    await browser.close()
+  }
 }
   }
 

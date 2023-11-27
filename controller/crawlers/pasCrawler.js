@@ -2,10 +2,14 @@ const PasUnb = require('../../models/pasunb')
 const User = require('../../models/userModel')
 const puppeteer = require('puppeteer');
 
+
+const {errorStatus} = require('../../ErrorStatus/errorStatus')
+const {updateStatus} = require('../messageAndStatus/updateStatus')
+
 const pasMainPage = async () => {
+  const browser = await puppeteer.launch({headless:false});
 
     try{
-    const browser = await puppeteer.launch({headless:false});
     const page = await browser.newPage();
   
     await page.goto('https://www.cebraspe.org.br/pas/subprogramas/'); // Replace with the URL of the webpage you want to scrape
@@ -37,16 +41,23 @@ const pasMainPage = async () => {
   
     await browser.close();
     updatePasOnDatabase(data)
-    console.log("pas Sucess")
-
+    updateStatus(true,"Sucess for main Page PasUNB",new Date())
+    
     return true
 
     req.items = data
     next();
  //   return res.status(200).json(data)
 }   catch(error){
-  return false
-    return res.status(500).json({message:"internal server Error"})
+  updateStatus(false,"pasMainPage",new Date())
+  errorStatus("pasMainPage",error)
+  return false;
+}
+
+finally{
+  if(browser){
+    await browser.close()
+  }
 }
   }
 

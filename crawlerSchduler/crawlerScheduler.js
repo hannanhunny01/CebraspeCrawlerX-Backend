@@ -4,7 +4,7 @@ const { pasMainPage, pasPagesCrawler} = require('../controller/crawlers/pasCrawl
 const { vestMainPage,vestPagesCrawler } = require('../controller/crawlers/vestCrawler');
 const { conMainPage,conPagesCrawler  } = require('../controller/crawlers/concursoCrawler');
 
-
+const {errorStatus} = require('../ErrorStatus/errorStatus')
 
 async function  testFunction  (){
   await new Promise((resolve) => {

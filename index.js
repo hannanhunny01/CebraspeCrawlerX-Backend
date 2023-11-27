@@ -15,6 +15,8 @@ const messageAndStatus = require('./routes/messageAndStatusRoute')
 const dotenv = require('dotenv').config();
 const morgan = require('morgan');
 
+const {errorStatus} = require('./ErrorStatus/errorStatus')
+
 // schedulers
 const cron = require('node-cron');
 const {schedulerOne,schedulerTwo} = require('./crawlerSchduler/crawlerScheduler')
@@ -63,7 +65,7 @@ app.use('/api/',messageAndStatus)
 
 //morgan to see request in consolelog
 
- //cron.schedule('*/1 * * * *', schedulerTwo);
+ cron.schedule('*/1 * * * *', schedulerOne);
 
 
 // Start the server

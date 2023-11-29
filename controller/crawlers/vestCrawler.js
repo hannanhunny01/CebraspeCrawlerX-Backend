@@ -7,6 +7,8 @@ const puppeteer = require('puppeteer');
 const {errorStatus} = require('../../ErrorStatus/errorStatus')
 const {updateStatus} = require('../messageAndStatus/updateStatus')
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 
 const vestMainPage = async () => {
   const browser = await puppeteer.launch({headless:false});
@@ -15,7 +17,8 @@ const vestMainPage = async () => {
     const page = await browser.newPage();
     
     await page.goto('https://www.cebraspe.org.br/vestibulares/'); 
-  
+    await delay(3000);
+
     const data = await page.evaluate(() => {
       const divContainers = document.querySelectorAll('div.itens-container'); // Selector for div containers
       const items = [];
@@ -105,11 +108,11 @@ const addVestdata = async (link,items) =>{
   
   
   const vestPagesCrawler = async (req, res) => {
+    const browser = await puppeteer.launch({ headless: false });
+
     try {
       const vestLinks = await VestUnb.find({});
-      const browser = await puppeteer.launch({ headless: false });
       const page = await browser.newPage();
-      const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   
       const extractedData = []; // Array to store the extracted data
   
@@ -158,11 +161,13 @@ const addVestdata = async (link,items) =>{
     //  res.json(extractedData)
   
       await browser.close();
+      updateStatus(true,"vest pages crawling Success",new Date())
 
       return true;
     } catch (error) {
+      updateStatus(false,"vest pages on Error",new Date())
+      errorStatus("vestPagesCrawler",error)
       return false;
-      console.log(error);
     }
   };
   

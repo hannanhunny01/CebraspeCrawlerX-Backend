@@ -7,6 +7,9 @@ const puppeteer = require('puppeteer');
 const {errorStatus} = require('../../ErrorStatus/errorStatus')
 const {updateStatus} = require('../messageAndStatus/updateStatus')
 
+
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 const conMainPage = async () => {
   const browser = await puppeteer.launch({headless:false});
 
@@ -14,7 +17,8 @@ const conMainPage = async () => {
     const page = await browser.newPage();
     
     await page.goto('https://www.cebraspe.org.br/concursos/'); 
-  
+    await delay(5000);
+
     const data = await page.evaluate(() => {
       const divContainers = document.querySelectorAll('div.itens-container'); // Selector for div containers
       const items = [];
@@ -110,11 +114,11 @@ const addConData = async (link,items) =>{
   
   
   const conPagesCrawler = async (req, res) => {
+    const browser = await puppeteer.launch({ headless: false });
+
     try {
       const conLinks = await Concurso.find({});
-      const browser = await puppeteer.launch({ headless: false });
       const page = await browser.newPage();
-      const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
   
       const extractedData = []; // Array to store the extracted data
   
@@ -163,10 +167,18 @@ const addConData = async (link,items) =>{
      // res.json(extractedData)
   
       await browser.close();
+      updateStatus(true,"Success crawling Concurso each page",new Date())
+
       return true;
     } catch (error) {
+      updateStatus(false,"error on crawling Concurso each page",new Date())
+      errorStatus("conPagesCrawler",error)
       return false;
-      console.log(error);
+    }
+    finally{
+      if(browser){
+        await browser.close()
+      }
     }
   };
   

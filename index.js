@@ -65,8 +65,8 @@ app.use('/api/',messageAndStatus)
 
 //morgan to see request in consolelog
 
- cron.schedule('*/1 * * * *', schedulerOne);
-
+ //cron.schedule('*/1 * * * *', schedulerOne);
+ //schedulerOne();
 
 // Start the server
 app.listen(PORT, () => {

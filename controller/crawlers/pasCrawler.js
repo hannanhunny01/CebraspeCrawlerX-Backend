@@ -6,6 +6,11 @@ const puppeteer = require('puppeteer');
 const {errorStatus} = require('../../ErrorStatus/errorStatus')
 const {updateStatus} = require('../messageAndStatus/updateStatus')
 
+
+
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+
 const pasMainPage = async () => {
   const browser = await puppeteer.launch({headless:false});
 
@@ -13,7 +18,8 @@ const pasMainPage = async () => {
     const page = await browser.newPage();
   
     await page.goto('https://www.cebraspe.org.br/pas/subprogramas/'); // Replace with the URL of the webpage you want to scrape
-  
+    await delay(3000);
+
     const data = await page.evaluate(() => {
       const divContainers = document.querySelectorAll('div.itens-container'); // Selector for div containers
       const items = [];
@@ -108,11 +114,11 @@ const addPasdata = async (link,items) =>{
 
 
 const pasPagesCrawler = async () => {
+  const browser = await puppeteer.launch({ headless: false });
+
   try {
     const pasLinks = await PasUnb.find({});
-    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
     const extractedData = []; // Array to store the extracted data
 
@@ -157,11 +163,18 @@ const pasPagesCrawler = async () => {
    // res.json(extractedData)
 
     await browser.close();
+    updateStatus(true,"Success crawling pas/UNB each page",new Date())
+
     return true;
 
   } catch (error) {
+    updateStatus(false,"pasPagesCrawler on Error",new Date())
+    errorStatus("pasPagesCrawler",error)
     return false;
-    console.log(error);
+  }finally{
+    if(browser){
+      await browser.close()
+    }
   }
 };
 

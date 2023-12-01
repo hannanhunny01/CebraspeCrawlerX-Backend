@@ -34,38 +34,28 @@ const sendMessageConcurso = asyncHandler(async function (req,res){
 
 
         const people = await getUser(item.users)
-     
         if (people.length > 0){
           
             data.push({nameOfObject:item.name + " " + item.vagas, updates:item_to_send ,people:people})
-            
         }
     }
 
 }
-        if (data.length > 0){
+    if (data.length > 0) {
+      const sendRequest = {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({item:data})
+    };
 
-            return res.json(data)
-            const msgdata = await axios.post('http://localhost:4000/sendMessagePas', { data });
-            
-            // Return the response from the other server
-            if(msgdata.data.message){
-               for(const item of getPasUnb){
-                  item.items_on_site_number = item.items_on_site.length
-                  await item.save()
-               }
-
-                 
-
-                 return res.json(msgdata.data.message);
-            }else{
-                res.json({message:"notSent"});
-            }
-            
-        }else{
-            // to add function to send me msg for no new update
-            return res.json({message:"no new update"})
-        }
+    const msgdata = await  fetch('http://localhost:4000/api/message/sendMessage', sendRequest);
+    const answer = await msgdata.json();  
+    return res.json(answer);
+  } else {
+    res.json({ message: "notSent" });
+  }
 
        
            

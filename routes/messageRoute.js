@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router(); 
 
 
-const {sendCrawlStatus} = require('../controller/sendMessage/sendcrawlStatus')
 
 const {sendMessagePas} = require('../controller/sendMessage/sendMessagePas')
 const {sendMessageConcurso} = require('../controller/sendMessage/sendMessageConcurso')

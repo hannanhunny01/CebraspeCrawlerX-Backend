@@ -46,7 +46,6 @@ const sendMessagePas = asyncHandler(async function (req, res) {
         body: JSON.stringify({item:data})
       };
 
-      // Make the POST request to the desired endpoint
       const msgdata = await  fetch('http://localhost:4000/api/message/sendMessage', sendRequest);
       const answer = await msgdata.json();  
       return res.json(answer);

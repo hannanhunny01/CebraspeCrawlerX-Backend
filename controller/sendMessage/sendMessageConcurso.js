@@ -5,6 +5,7 @@ const axios = require('axios');
 const { findLatestDate } = require('../../utils/latestDateChecker')
 
 const {getUser} = require('./getUsersZap')
+
 const sendMessageConcurso = asyncHandler(async function (req,res){
      try{
     const getConcurso  = await  Concurso.find({})
@@ -51,6 +52,9 @@ const sendMessageConcurso = asyncHandler(async function (req,res){
     };
 
     const msgdata = await  fetch('http://localhost:4000/api/message/sendMessage', sendRequest);
+    if(msgdata.ok){
+
+    }
     const answer = await msgdata.json();  
     return res.json(answer);
   } else {

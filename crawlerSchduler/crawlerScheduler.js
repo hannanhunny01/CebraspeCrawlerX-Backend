@@ -59,12 +59,12 @@ async function checkMainPageCebraspe(items) {
 
 
 
-const schedulerOne =()=>{
-  checkMainPageCebraspe(mainPageScheduler)
+const schedulerOne = async ()=>{
+   await checkMainPageCebraspe(mainPageScheduler)
 }
 
-const schedulerTwo =()=>{
-  checkMainPageCebraspe(allPageScheduler)
+const schedulerTwo = async ()=>{
+   await checkMainPageCebraspe(allPageScheduler)
 }
 
 

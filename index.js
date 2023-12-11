@@ -17,13 +17,23 @@ const morgan = require('morgan');
 
 const {errorStatus} = require('./ErrorStatus/errorStatus')
 
+const schedulerQueue = require('./crawlerSchduler/quequeScheduler')
 // schedulers
 const cron = require('node-cron');
 const {schedulerOne,schedulerTwo} = require('./crawlerSchduler/crawlerScheduler')
-
+const {sendMessage} = require('./crawlerSchduler/messageScheduler')
 const PORT = process.env.PORT || 4000;
 const app = express();
 
+
+
+
+// importing Queue
+
+
+
+
+ //cron.schedule('*/1 * * * *', processQueue);
 
 
 //let requestCounter = 0;
@@ -35,7 +45,8 @@ const app = express();
 //app.use(morgan(':method :url :status :response-time ms - Request #:request-count'));
 
 
-const cors = require('cors')
+const cors = require('cors');
+const req = require('express/lib/request');
 
 dbConnect();
 //app.use(cors({

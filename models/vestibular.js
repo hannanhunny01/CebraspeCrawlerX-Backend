@@ -22,6 +22,24 @@ const vestUnbSchema = new mongoose.Schema({
        default:0
 
     },
+    sendMessageEmail:{
+      
+      type: Boolean,
+      default:false,
+  }
+  ,
+  sendMessagePhone:{
+    
+      type: Boolean,
+      default:false,
+  }
+  ,
+  sendMessageEmail:{
+    
+      type: Boolean,
+      default:false,
+  }
+  ,
 
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 

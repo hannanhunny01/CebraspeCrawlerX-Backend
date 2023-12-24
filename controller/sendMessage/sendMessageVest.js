@@ -5,12 +5,14 @@ const axios = require('axios');
 const { findLatestDate } = require('../../utils/latestDateChecker')
 
 const {getUser} = require('./getUsersZap')
-const sendMessageVest = asyncHandler(async function (req,res){
+const sendMessageVest = asyncHandler(async function (){
      try{
     const getVest  = await  VestUnb.find({})
     const data =[]
     for(const item of getVest){
-        if(item.items_on_site_number<item.items_on_site.length){
+      const hasSend = item.sendMessageEmail || item.sendMessagePhone || item.sendMessageZap;
+
+        if(item.items_on_site_number<item.items_on_site.length && !hasSend){
 
          
           const all_titles= item.items_on_site
@@ -37,7 +39,7 @@ const sendMessageVest = asyncHandler(async function (req,res){
      
         if (people.length > 0){
           
-            data.push({nameOfObject:"VESTIBULAR :- " + item.name , updates:item_to_send ,people:people})
+            data.push({itemId:item._id , itemType:"vestibular", nameOfObject:"VESTIBULAR :- " + item.name , updates:item_to_send ,people:people})
             
         }
     }
@@ -54,11 +56,9 @@ const sendMessageVest = asyncHandler(async function (req,res){
 
   const msgdata = await  fetch('http://localhost:4000/api/message/sendMessage', sendRequest);
   const answer = await msgdata.json();  
-  return res.json(answer);
-    } else {
-  res.json({ message: "notSent" });
-    }
-
+  console.log(answer) 
+  return answer;
+    } 
 
        
            

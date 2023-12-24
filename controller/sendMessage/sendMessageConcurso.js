@@ -11,7 +11,8 @@ const sendMessageConcurso = asyncHandler(async function (req,res){
     const getConcurso  = await  Concurso.find({})
     const data =[]
     for(const item of getConcurso){
-        if(item.items_on_site_number<item.items_on_site.length){
+      const hasSend = item.sendMessageEmail || item.sendMessagePhone || item.sendMessageZap;
+        if(item.items_on_site_number<item.items_on_site.length && !hasSend ){
 
          
           const all_titles= item.items_on_site
@@ -36,8 +37,8 @@ const sendMessageConcurso = asyncHandler(async function (req,res){
 
         const people = await getUser(item.users)
         if (people.length > 0){
-          
-            data.push({nameOfObject:item.name + " " + item.vagas, updates:item_to_send ,people:people})
+            console.log(item._id)
+            data.push({itemId:item._id , itemType:"concurso",nameOfObject:item.name + " " + item.vagas, updates:item_to_send ,people:people})
         }
     }
 
@@ -52,14 +53,10 @@ const sendMessageConcurso = asyncHandler(async function (req,res){
     };
 
     const msgdata = await  fetch('http://localhost:4000/api/message/sendMessage', sendRequest);
-    if(msgdata.ok){
-
-    }
     const answer = await msgdata.json();  
-    return res.json(answer);
-  } else {
-    res.json({ message: "notSent" });
-  }
+    console.log(answer) 
+    return answer;
+  } 
 
        
            

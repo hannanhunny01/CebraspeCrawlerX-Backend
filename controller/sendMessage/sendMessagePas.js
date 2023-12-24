@@ -12,7 +12,9 @@ const sendMessagePas = asyncHandler(async function (req, res) {
     const data = [];
 
     for (const item of getPasUnb) {
-      if (item.items_on_site_number < item.items_on_site.length) {
+      const hasSend = item.sendMessageEmail || item.sendMessagePhone || item.sendMessageZap;
+
+      if (item.items_on_site_number < item.items_on_site.length && !hasSend) {
         const all_titles = item.items_on_site;
         let dates = all_titles.map(p => p.date);
         const datesToSend = [];
@@ -32,7 +34,7 @@ const sendMessagePas = asyncHandler(async function (req, res) {
         const people = await getUser(item.users);
 
         if (people.length > 0) {
-          data.push({ nameOfObject: item.stage_pas + " " + item.year_pas, updates: item_to_send, people: people });
+          data.push({itemId:item._id , itemType:"pas", nameOfObject: item.stage_pas + " " + item.year_pas, updates: item_to_send, people: people });
         }
       }
     }
@@ -45,13 +47,11 @@ const sendMessagePas = asyncHandler(async function (req, res) {
         },
         body: JSON.stringify({item:data})
       };
-
       const msgdata = await  fetch('http://localhost:4000/api/message/sendMessage', sendRequest);
       const answer = await msgdata.json();  
-      return res.json(answer);
-    } else {
-      res.json({ message: "notSent" });
-    }
+      console.log(answer) 
+      return answer;
+    } 
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });

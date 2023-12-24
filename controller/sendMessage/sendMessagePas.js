@@ -12,9 +12,9 @@ const sendMessagePas = asyncHandler(async function (req, res) {
     const data = [];
 
     for (const item of getPasUnb) {
-      const hasSend = item.sendMessageEmail || item.sendMessagePhone || item.sendMessageZap;
+     // const hasSend = item.sendMessageEmail || item.sendMessagePhone || item.sendMessageZap;
 
-      if (item.items_on_site_number < item.items_on_site.length && !hasSend) {
+      if (item.items_on_site_number < item.items_on_site.length ) {
         const all_titles = item.items_on_site;
         let dates = all_titles.map(p => p.date);
         const datesToSend = [];
@@ -31,7 +31,7 @@ const sendMessagePas = asyncHandler(async function (req, res) {
           item_to_send.push(...item_on_site);
         }
 
-        const people = await getUser(item.users);
+        const people = await getUser(item.users,item._id, 'pas');
 
         if (people.length > 0) {
           data.push({itemId:item._id , itemType:"pas", nameOfObject: item.stage_pas + " " + item.year_pas, updates: item_to_send, people: people });
@@ -57,5 +57,6 @@ const sendMessagePas = asyncHandler(async function (req, res) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 module.exports = { sendMessagePas };

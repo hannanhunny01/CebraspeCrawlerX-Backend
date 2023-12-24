@@ -35,9 +35,8 @@ const sendMessageConcurso = asyncHandler(async function (req,res){
         }
 
 
-        const people = await getUser(item.users)
+        const people = await getUser(item.users,item._id, 'concurso');
         if (people.length > 0){
-            console.log(item._id)
             data.push({itemId:item._id , itemType:"concurso",nameOfObject:item.name + " " + item.vagas, updates:item_to_send ,people:people})
         }
     }

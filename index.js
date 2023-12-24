@@ -17,7 +17,7 @@ const morgan = require('morgan');
 
 const {errorStatus} = require('./ErrorStatus/errorStatus')
 
-const schedulerQueue = require('./crawlerSchduler/quequeScheduler')
+ const schedulerQueue = require('./crawlerSchduler/quequeScheduler')
 // schedulers
 const cron = require('node-cron');
 const {schedulerOne,schedulerTwo} = require('./crawlerSchduler/crawlerScheduler')

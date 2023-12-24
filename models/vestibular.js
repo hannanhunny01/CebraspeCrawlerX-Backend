@@ -24,25 +24,43 @@ const vestUnbSchema = new mongoose.Schema({
     },
     sendMessageEmail:{
       
-      type: Boolean,
-      default:false,
+      type: Number,
+      default:0,
   }
   ,
   sendMessagePhone:{
     
-      type: Boolean,
-      default:false,
+    type: Number,
+    default:0,
   }
   ,
-  sendMessageEmail:{
+  sendMessageTelegram:{
     
-      type: Boolean,
-      default:false,
+      type: Number,
+      default:0,
   }
   ,
 
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 
+  });
+
+  vestUnbSchema.pre('save', function(next) {
+    if (this.isNew) {
+      this.sendMessageEmail = this.items_on_site.length;
+      this.sendMessagePhone = this.items_on_site.length;
+      this.sendMessageTelegram = this.items_on_site.length;
+    }
+    if(this.users.length == 0){
+      this.sendMessageEmail = this.items_on_site.length;
+      this.sendMessagePhone = this.items_on_site.length;
+      this.sendMessageTelegram = this.items_on_site.length;
+
+    }
+
+
+
+    next();
   });
 
   const VestUnb = mongoose.model('VestUnb', vestUnbSchema);

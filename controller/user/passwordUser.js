@@ -16,7 +16,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     await user.save()
 
     const resetUrl =`${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`
-
+    console.log(resetUrl)
     const message = `forgot your password reset your password on  ${resetUrl}`
     await sendEmail({
         email:user.email,

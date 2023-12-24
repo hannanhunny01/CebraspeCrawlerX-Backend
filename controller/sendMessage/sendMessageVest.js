@@ -35,7 +35,7 @@ const sendMessageVest = asyncHandler(async function (){
         }
 
 
-        const people = await getUser(item.users)
+        const people = await getUser(item.users,item._id, 'vestibular');
      
         if (people.length > 0){
           

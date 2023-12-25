@@ -4,6 +4,13 @@ const crypto = require('crypto')
 const {sendEmail} = require('../../utils/email');
 const { response } = require('express');
 
+const fs = require('fs');
+const path = require('path');
+
+// Assuming passwordUser.js is in the controller/user directory
+const resetPasswordTemplatePath = path.join(__dirname, '../../utils/templates/resetTemplate/index.html');
+let resetPasswordTemplate = fs.readFileSync(resetPasswordTemplatePath, 'utf-8');
+
 const forgotPassword = asyncHandler(async (req, res) => {
    
     try{
@@ -16,12 +23,13 @@ const forgotPassword = asyncHandler(async (req, res) => {
     await user.save()
 
     const resetUrl =`${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`
+    resetPasswordTemplate = resetPasswordTemplate.replace("{{RESET_BUTTON_URL}}",resetUrl)
     console.log(resetUrl)
     const message = `forgot your password reset your password on  ${resetUrl}`
     await sendEmail({
         email:user.email,
         subject:"you password reset token valid for 10 minutes",
-        message 
+        html:resetPasswordTemplate 
     })
     return res.status(200).json({message:"Link para Definir novo Senha foi enviado para este Email"})}
     catch(error){

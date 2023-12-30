@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const dbConnect = require('./config/dbConnect');
+const path = require('path');
 
 
 // Routes
@@ -64,6 +65,9 @@ dbConnect();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// static file hosting
+const templatePath = path.join(__dirname, 'utils', 'templates', 'emailConfirmation');
+app.use(express.static(templatePath));
 
 
 // Use the authRouter for handling user-related routes

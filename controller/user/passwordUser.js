@@ -11,6 +11,8 @@ const path = require('path');
 const resetPasswordTemplatePath = path.join(__dirname, '../../utils/templates/resetTemplate/index.html');
 let resetPasswordTemplate = fs.readFileSync(resetPasswordTemplatePath, 'utf-8');
 
+
+
 const forgotPassword = asyncHandler(async (req, res) => {
    
     try{

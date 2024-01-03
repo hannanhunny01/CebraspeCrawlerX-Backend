@@ -51,9 +51,8 @@ const sendMessageConcurso = asyncHandler(async function (req,res){
       body: JSON.stringify({item:data})
     };
 
-    const msgdata = await  fetch('http://localhost:4000/api/message/sendMessage', sendRequest);
+    const msgdata = await  fetch(`${process.env.MICROSERIVCE_URL}:${process.env.MICROSERIVCE_PORT}/api/message/sendMessage`, sendRequest);
     const answer = await msgdata.json();  
-    console.log(answer) 
     return answer;
   } 
 

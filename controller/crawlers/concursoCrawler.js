@@ -50,7 +50,7 @@ const conMainPage = async () => {
     updateConOnDatabase(data)
   //   req.items = data
     updateStatus(true,"conMainPage",new Date())
-    console.log("concurso Sucess")
+   // console.log("concurso Sucess")
     return true;
 
     next();
@@ -108,7 +108,7 @@ const addConData = async (link,items) =>{
       
     
     }catch(error){
-      console.log(error)
+     // console.log(error)
     }
   }
   

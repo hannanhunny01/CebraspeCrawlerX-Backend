@@ -8,7 +8,6 @@ const checkUser = asyncHandler(async (req, res) => {
     const email = req.body.email;
     const phone = req.body.phone;
   
-    console.log(email,phone)
     const findUserEmail = await User.findOne({ email: email});
     
     if (findUserEmail) {

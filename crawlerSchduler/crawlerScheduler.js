@@ -16,7 +16,7 @@ async function  testFunction  (){
     return false;
 }
 
-const mainPageScheduler = [testFunction,pasMainPage, vestMainPage, conMainPage];
+const mainPageScheduler = [pasMainPage, vestMainPage, conMainPage];
 const allPageScheduler = [pasPagesCrawler, vestPagesCrawler, conPagesCrawler];
 
 // Object to store retry counts for each function
@@ -25,7 +25,6 @@ async function checkMainPageCebraspe(items) {
   const maxRetries = 3;
   const retryCounts = {};
 
-  console.log("running now")
   const functionStack = [...items]
   for (let i = 0; i < functionStack.length; ) {
     const func = functionStack[i];

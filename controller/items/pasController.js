@@ -39,7 +39,6 @@ const getMyPas = asyncHandler(async function (req, res) {
     if (user) {
       const pasObj = [];
 
-      console.log(user.pasUnb);
 
       for (const item of user.pasUnb) {
         

@@ -26,7 +26,6 @@ async function testModels() {
       isPremium: true
     });
     await user.save();
-    console.log('User created:', user);
 
     // Create a PasUnb course
     const pasUnb = new PasUnb({
@@ -49,7 +48,6 @@ async function testModels() {
       items_on_site_number: 52
     });
     await pasUnb.save();
-    console.log('PasUnb course created:', pasUnb);
 
     // Create a VestUnb course
     const vestUnb = new VestUnb({
@@ -68,13 +66,13 @@ async function testModels() {
       items_on_site_number: 14
     });
     await vestUnb.save();
-    console.log('VestUnb course created:', vestUnb);
+   // console.log('VestUnb course created:', vestUnb);
 
     // Update the user's subscribed courses
     user.pasUnb.push(pasUnb._id);
     user.VestUnb.push(vestUnb._id);
     await user.save();
-    console.log('User updated with subscribed courses:', user);
+   // console.log('User updated with subscribed courses:', user);
   } catch (error) {
     console.error('Error:', error);
   } finally {

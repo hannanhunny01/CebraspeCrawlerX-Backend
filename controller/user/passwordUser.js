@@ -7,7 +7,6 @@ const { response } = require('express');
 const fs = require('fs');
 const path = require('path');
 
-// Assuming passwordUser.js is in the controller/user directory
 const resetPasswordTemplatePath = path.join(__dirname, '../../utils/templates/resetTemplate/index.html');
 let resetPasswordTemplate = fs.readFileSync(resetPasswordTemplatePath, 'utf-8');
 
@@ -16,7 +15,6 @@ let resetPasswordTemplate = fs.readFileSync(resetPasswordTemplatePath, 'utf-8');
 const forgotPassword = asyncHandler(async (req, res) => {
    
     try{
-        console.log('eakwljelkwej')
     const user = await User.findOne({email:req.body.email})
     if(!user){
         return res.status(404).json({message:"User not Found"});
@@ -24,9 +22,8 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const resetToken = user.createPasswordResetToken()
     await user.save()
 
-    const resetUrl =`${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`
+    const resetUrl =`${process.env.SITE_URL}/#/resetpassword/${resetToken}`
     resetPasswordTemplate = resetPasswordTemplate.replace("{{RESET_BUTTON_URL}}",resetUrl)
-    console.log(resetUrl)
     const message = `forgot your password reset your password on  ${resetUrl}`
     await sendEmail({
         email:user.email,

@@ -1,5 +1,8 @@
 const License = require("../../models/license");
 const User = require('../../models/userModel')
+const fs = require('fs');
+const path = require('path');
+
 
 const {sendEmail}= require('../../utils/email')
 
@@ -43,12 +46,15 @@ const makeLicense = async (req,res) =>{
     }    
 
     const newLicense = await License.create({licenseKey:newKey,issuedTo:findUser.id,issuedBy:issuedBy,issueDate:issueDate});
-    await newLicense.save() 
+    await newLicense.save()
+    const licenseTemplatePath = path.join(__dirname, '../../utils/templates/license/index.html');
+    let licenseTemplate = fs.readFileSync(licenseTemplatePath, 'utf-8'); 
+    licenseTemplate = licenseTemplate.replace('{{code}}', newLicense.licenseKey);
+
     await sendEmail({
         email:email,
         subject:"Chave de Licenca para Cadastrar no Whatsapp ",
-        message:`Foi criado um chave de Acesso para Cadastrar no Servico de Whatsapp \n este Chave foi criado Exculsivamente para sua conta .Entao so funcionaria oara voce
-            \n esse o Chave \n  ${newLicense.licenseKey}` 
+        html:licenseTemplate
     })
 
     return res.status(200).json({message:"Chave criado e enviado para usuario com sucesso"});
@@ -72,18 +78,20 @@ const makeLicense = async (req,res) =>{
 const checkLicense = async (req,res) =>{
 
     try{
+        console.log(req.body , req.id)
 
-        const license = await License.findOne({issuedTo:req.id})
-        if (license && req.body.accessToken === license.licenseKey ){
+        const license = await License.find({issuedTo:req.id})
+        for( const item of license){
+         if(item.licenseKey === req.body.accessToken){
 
           return res.status(200).json({message:"Chave verificada com Sucesso"}) 
 
-        }else{
-
-            return res.status(401).json({message:"Chave Invalida ou errada"});
         }
-       
+        }
+          return res.status(401).json({message:"Chave Invalida ou errada"});
+  
 
+              
 
 
     }catch(error){

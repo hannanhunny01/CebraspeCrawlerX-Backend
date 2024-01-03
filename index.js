@@ -66,7 +66,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // static file hosting
-const templatePath = path.join(__dirname, 'utils', 'templates', 'emailConfirmation');
+const templatePath = path.join(__dirname, 'utils', 'templates', 'license');
 app.use(express.static(templatePath));
 
 
@@ -78,14 +78,10 @@ app.use('/api/sendMessage',messageRouter)
 app.use('/api/profile',profilRoute)
 app.use('/api/',messageAndStatus)
 
-//morgan to see request in consolelog
 
- //cron.schedule('*/1 * * * *', schedulerOne);
- //schedulerOne();
 
-// Start the server
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 });
 
-//schedulerTwo();
+

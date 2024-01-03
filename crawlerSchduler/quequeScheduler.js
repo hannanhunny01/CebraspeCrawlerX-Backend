@@ -38,19 +38,13 @@ cron.schedule('0 */6 * * *', () => {
   addToQueue(schedulerTwo, 'SchedulerTwo'); // Every 6 hours
 });
 
-//cron.schedule('0 */4 * * *', () => {
-//  addToQueue(sendMessage, 'SendMessage'); // Every 4 hours
-//});
+cron.schedule('0 */4 * * *', () => {
+  addToQueue(sendMessage, 'SendMessage'); // Every 4 hours
+});
 
-//cron.schedule('0 */3 * * *', processQueue); // Every 3 hours
 
-//cron.schedule('*/1 * * * *', () => {
-//  addToQueue(sendMessage, 'SendMessage'); // Every 2 minutes
-//});
 
-//addToQueue(schedulerOne, 'SchedulerOne'); 
-//addToQueue(schedulerTwo, 'SchedulerTwo'); // Every 6 hours
-addToQueue(sendMessage, 'SendMessage');
+
 cron.schedule('*/1 * * * *', processQueue); // Every 2 minutes
 
 

@@ -87,7 +87,6 @@ const getMyCon = asyncHandler(async function (req, res) {
   const delteConByUser = asyncHandler(async function (req, res) {
     try {
       const user = await User.findById(req.id)
-       console.log("hello");
       if(user.concurso.includes(req.body.concursoId)){
         user.concurso.pull(req.body.concursoId);
         await user.save()

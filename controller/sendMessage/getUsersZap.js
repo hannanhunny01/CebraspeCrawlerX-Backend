@@ -96,7 +96,6 @@
 
 
 
-   console.log(contacts)
    return contacts
       }catch(error){
             console.log(error)

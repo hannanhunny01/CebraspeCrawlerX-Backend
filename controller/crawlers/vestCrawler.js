@@ -5,13 +5,17 @@ const puppeteer = require('puppeteer');
 
 // errorStatus and SystemStatus
 const {errorStatus} = require('../../ErrorStatus/errorStatus')
-const {updateStatus} = require('../messageAndStatus/updateStatus')
+const {updateStatus} = require('../messageAndStatus/updateStatus');
+const { trusted } = require('mongoose');
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 
 const vestMainPage = async () => {
-  const browser = await puppeteer.launch({headless:false});
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: 'new', // Opt in for the new Headless mode
+  });
 
     try{
     const page = await browser.newPage();
@@ -108,7 +112,10 @@ const addVestdata = async (link,items) =>{
   
   
   const vestPagesCrawler = async (req, res) => {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      headless: 'new', // Opt in for the new Headless mode
+    });
 
     try {
       const vestLinks = await VestUnb.find({});

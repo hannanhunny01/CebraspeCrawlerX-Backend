@@ -11,7 +11,10 @@ const {updateStatus} = require('../messageAndStatus/updateStatus')
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const conMainPage = async () => {
-  const browser = await puppeteer.launch({headless:false});
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: 'new', // Opt in for the new Headless mode
+  });
 
     try{
     const page = await browser.newPage();
@@ -114,7 +117,10 @@ const addConData = async (link,items) =>{
   
   
   const conPagesCrawler = async (req, res) => {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      headless: 'new', // Opt in for the new Headless mode
+    });
 
     try {
       const conLinks = await Concurso.find({});

@@ -44,6 +44,11 @@ cron.schedule('0 */4 * * *', () => {
 
 
 
+//addToQueue(schedulerOne, 'SchedulerOne'); // Once a day
+//addToQueue(schedulerTwo, 'SchedulerTwo'); // Every 6 hours
+addToQueue(sendMessage, 'SendMessage'); // Every 4 hours
+
+
 
 cron.schedule('*/1 * * * *', processQueue); // Every 2 minutes
 

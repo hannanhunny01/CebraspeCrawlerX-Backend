@@ -12,7 +12,10 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 
 const pasMainPage = async () => {
-  const browser = await puppeteer.launch({headless:false});
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: 'new', // Opt in for the new Headless mode
+  });
 
     try{
     const page = await browser.newPage();
@@ -114,7 +117,10 @@ const addPasdata = async (link,items) =>{
 
 
 const pasPagesCrawler = async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: 'new', // Opt in for the new Headless mode
+  });
 
   try {
     const pasLinks = await PasUnb.find({});

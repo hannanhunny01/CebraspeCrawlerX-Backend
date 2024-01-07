@@ -34,11 +34,7 @@ To get started with Cebraspecrawlerx-backend, follow these steps:
 
 For detailed information on the available APIs and their usage, refer to the [API Documentation](docs/api-docs.md).
 
-## Contributors
 
-- Your Name
-- Contributor 1
-- Contributor 2
 
 ## License
 

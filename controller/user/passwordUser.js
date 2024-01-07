@@ -7,8 +7,7 @@ const { response } = require('express');
 const fs = require('fs');
 const path = require('path');
 
-const resetPasswordTemplatePath = path.join(__dirname, '../../utils/templates/resetTemplate/index.html');
-let resetPasswordTemplate = fs.readFileSync(resetPasswordTemplatePath, 'utf-8');
+
 
 
 
@@ -21,7 +20,8 @@ const forgotPassword = asyncHandler(async (req, res) => {
     }
     const resetToken = user.createPasswordResetToken()
     await user.save()
-
+    const resetPasswordTemplatePath = path.join(__dirname, '../../utils/templates/resetTemplate/index.html');
+    let resetPasswordTemplate = fs.readFileSync(resetPasswordTemplatePath, 'utf-8');
     const resetUrl =`${process.env.SITE_URL}/#/resetpassword/${resetToken}`
     resetPasswordTemplate = resetPasswordTemplate.replace("{{RESET_BUTTON_URL}}",resetUrl)
     const message = `forgot your password reset your password on  ${resetUrl}`

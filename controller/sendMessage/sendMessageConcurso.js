@@ -11,8 +11,7 @@ const sendMessageConcurso = asyncHandler(async function (req,res){
     const getConcurso  = await  Concurso.find({})
     const data =[]
     for(const item of getConcurso){
-      const hasSend = item.sendMessageEmail || item.sendMessagePhone || item.sendMessageZap;
-        if(item.items_on_site_number<item.items_on_site.length && !hasSend ){
+        if(item.items_on_site_number<item.items_on_site.length ){
 
          
           const all_titles= item.items_on_site
@@ -42,6 +41,7 @@ const sendMessageConcurso = asyncHandler(async function (req,res){
     }
 
 }
+   console.log(data)
     if (data.length > 0) {
       const sendRequest = {
       method: 'POST',
@@ -50,8 +50,7 @@ const sendMessageConcurso = asyncHandler(async function (req,res){
       },
       body: JSON.stringify({item:data})
     };
-
-    const msgdata = await  fetch(`${process.env.MICROSERIVCE_URL}:${process.env.MICROSERIVCE_PORT}/api/message/sendMessage`, sendRequest);
+    const msgdata = await  fetch(`${process.env.MICROSERIVCE_URL}/api/message/sendMessage`, sendRequest);
     const answer = await msgdata.json();  
     return answer;
   } 

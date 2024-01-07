@@ -10,9 +10,8 @@ const sendMessageVest = asyncHandler(async function (){
     const getVest  = await  VestUnb.find({})
     const data =[]
     for(const item of getVest){
-      const hasSend = item.sendMessageEmail || item.sendMessagePhone || item.sendMessageZap;
 
-        if(item.items_on_site_number<item.items_on_site.length && !hasSend){
+        if(item.items_on_site_number<item.items_on_site.length){
 
          
           const all_titles= item.items_on_site
@@ -45,6 +44,8 @@ const sendMessageVest = asyncHandler(async function (){
     }
 
 }
+  console.log(data)
+
     if (data.length > 0) {
     const sendRequest = {
     method: 'POST',
@@ -54,7 +55,7 @@ const sendMessageVest = asyncHandler(async function (){
     body: JSON.stringify({item:data})
   };
 
-  const msgdata = await  fetch(`${process.env.MICROSERIVCE_URL}:${process.env.MICROSERIVCE_PORT}/api/message/sendMessage`, sendRequest);
+  const msgdata = await  fetch(`${process.env.MICROSERIVCE_URL}/api/message/sendMessage`, sendRequest);
   const answer = await msgdata.json();  
   return answer;
     } 

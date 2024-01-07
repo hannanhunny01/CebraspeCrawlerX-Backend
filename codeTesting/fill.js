@@ -17,7 +17,7 @@ const addNewItemToPasUnb = async () => {
         const allItems = await PasUnb.find({});
 
         for (const pas of allItems) {
-            pas.items_on_site.push({ date: "01/01/2024 10:00", name: "test", link: "test" });
+            pas.items_on_site.push({ date: "05/01/2024 10:00", name: "test", link: "test" });
         }
 
         await Promise.all(allItems.map(item => item.save()));

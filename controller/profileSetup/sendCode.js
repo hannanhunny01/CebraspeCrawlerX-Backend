@@ -29,7 +29,7 @@ const sendCode = async (req, res) => {
     const checkStatus = await CodeSaver.findOne({ contactMethod: contactMethod, contactValue: contactValue })
 
     if (!checkStatus) {
-      const sendRequest = await axios.post(`${process.env.MICROSERIVCE_URL}:${process.env.MICROSERIVCE_PORT}/api/code/sendCode`, { contactMethod, contactValue });
+      const sendRequest = await axios.post(`${process.env.MICROSERIVCE_URL}/api/code/sendCode`, { contactMethod, contactValue });
       if (sendRequest.data.code) {
         const verification = new CodeSaver({
           contactMethod: contactMethod,
@@ -79,7 +79,7 @@ const verifyCodeTelegram = async (req, res) => {
       })
     }
 
-    const response = await fetch(`${process.env.MICROSERIVCE_URL}:${process.env.MICROSERIVCE_PORT}/api/code/verifyTelegram`, requestOptions);
+    const response = await fetch(`${process.env.MICROSERIVCE_URL}/api/code/verifyTelegram`, requestOptions);
     const data = await response.json()
     if (response.ok) {
       if(await checkIfExist("telegram", data.chatId)){
